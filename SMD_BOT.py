@@ -65,12 +65,12 @@ class MyClient(discord.Client):
 
 			#Data Match
 			if (api_res_firstname == std_firstname and api_res_lastname == std_lastname):
+				await message.channel.send("Status: :white_check_mark:")
 				role = discord.utils.get(message.author.guild.roles,name = api_res_grade + "/" + api_res_class)
 				role2 = discord.utils.get(message.author.guild.roles,name = "M:" + api_res_grade)
 				role3 = discord.utils.get(message.author.guild.roles,name = "Student")
 				#await message.author.add_roles(abc.+)
 				await message.author.edit(roles = [role,role2,role3])
-				await message.channel.send("Status: :white_check_mark:")
 			else:
 				await message.channel.send("Status: :x:")
 

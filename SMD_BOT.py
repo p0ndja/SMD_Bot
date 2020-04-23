@@ -26,11 +26,6 @@ class MyClient(discord.Client):
 	async def on_ready(self):
 		print('\nLogged in as ' + self.user.name + " (" + str(self.user.id) + ")\n------")
 		await client.change_presence(activity=discord.Game(name='รอเด็กมาโรงเรียน'))
-		IsStart = False
-		if not IsStart:
-			IsStart = True
-			channel = client.get_channel(700717666540978266)
-			await channel.send('Bot is now online')
 
 	async def on_message(self, message):
 		if message.content.startswith('hello()'):

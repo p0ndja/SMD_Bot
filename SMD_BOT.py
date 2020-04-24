@@ -36,6 +36,35 @@ class MyClient(discord.Client):
 			em.add_field(name = "hello()",value = "คำสั่งคนเหงา")
 			em.add_field(name = "verify()",value = "สำหรับยืนยันตัวตน")
 			await message.channel.send(content = None ,embed = em)
+
+		if message.content.startswith('testverify()'):
+			mess_input = message
+			user_id = str(message.author.id)
+			text = message.content[len('testverify()')+1:].split()
+			std_id = text[0]
+			std_firstname = text[1]
+			std_lastname = text[2]
+
+			response = requests.get("https://smd.pondja.com/api/student.php")
+			if response.status_code != 200:
+				message.channel.send('ตอนนี้ระบบกำลังมีปัญหา ลองใหม่ในภายหลังนะครับ')
+
+			Con = response.json()
+
+			api_res_id = Con["std"][std_id][0]["id"]
+			api_res_firstname = Con["std"][std_id][0]["firstname"]
+			api_res_lastname = Con["std"][std_id][0]["lastname"]
+			api_res_grade = Con["std"][std_id][0]["grade"]
+			api_res_class = Con["std"][std_id][0]["class"]
+				
+			await message.channel.send("USER: `" + user_id + " (" + message.author.display_name + ")`\nชื่อ: `" + api_res_firstname + "`\nนามสกุล: `" + api_res_lastname + "`\nระดับชั้น: `" + api_res_grade + "/" + api_res_class + "`")
+
+			#Data Match
+			if (api_res_firstname == std_firstname and api_res_lastname == std_lastname):
+				await message.channel.send("Status: :white_check_mark:")
+			else:
+				await message.channel.send("Status: :x:")
+
 		if message.content.startswith('verify()'):
 			mess_input = message
 			user_id = str(message.author.id)

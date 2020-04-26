@@ -28,13 +28,13 @@ class MyClient(discord.Client):
 		await client.change_presence(activity=discord.Game(name='รอเด็กมาโรงเรียน'))
 
 	async def on_message(self, message):
-		if message.content.startswith('hello()'):
+		if message.content.startswith('/hello'):
 			await message.channel.send(randomText_Hello().format(message))
-		if message.content.startswith('help()') or message.content.startswith('!help'):
+		if message.content.startswith('/help') or message.content.startswith('!help'):
 			em = discord.Embed(title = "สิ่งที่น้องทำได้",description = "มีแค่นี้แหละ")
-			em.add_field(name = "help()",value = "ก็ที่ทำอยู่ตอนนี้แหละ")
-			em.add_field(name = "hello()",value = "คำสั่งคนเหงา")
-			em.add_field(name = "verify()",value = "สำหรับยืนยันตัวตน")
+			em.add_field(name = "/help",value = "ก็ที่ทำอยู่ตอนนี้แหละ")
+			em.add_field(name = "/hello",value = "คำสั่งคนเหงา")
+			em.add_field(name = "/verify",value = "สำหรับยืนยันตัวตน")
 			await message.channel.send(content = None ,embed = em)
 
 		if message.content.startswith('testverify()'):
@@ -65,10 +65,10 @@ class MyClient(discord.Client):
 			else:
 				await message.channel.send("Status: :x:")
 
-		if message.content.startswith('verify()'):
+		if message.content.startswith('/verify'):
 			mess_input = message
 			user_id = str(message.author.id)
-			text = message.content[len('verify()')+1:].split()
+			text = message.content[len('/verify')+1:].split()
 			std_id = text[0]
 			std_firstname = text[1]
 			std_lastname = text[2]
@@ -98,14 +98,14 @@ class MyClient(discord.Client):
 			else:
 				await message.channel.send("Status: :x:")
 
-		if message.content.startswith('announce()'):
-			Mes_Str = message.content[len('announce()')+1:]
+		if message.content.startswith('/announce'):
+			Mes_Str = message.content[len('/announce')+1:]
 			channel = client.get_channel(700718680333615154)
 			await message.delete()
 			await channel.send("@everyone\n"+Mes_Str)
 
-		if message.content.startswith('update()'):
-			Mes_Str = message.content[len('update()')+1:]
+		if message.content.startswith('/update'):
+			Mes_Str = message.content[len('/update')+1:]
 			channel = client.get_channel(700875375651192832)
 			await message.delete()
 			await channel.send("@everyone\n"+Mes_Str)

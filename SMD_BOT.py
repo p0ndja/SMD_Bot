@@ -37,10 +37,10 @@ class MyClient(discord.Client):
 			em.add_field(name = "/verify",value = "สำหรับยืนยันตัวตน")
 			await message.channel.send(content = None ,embed = em)
 
-		if message.content.startswith('testverify()'):
+		if message.content.startswith('/testverify'):
 			mess_input = message
 			user_id = str(message.author.id)
-			text = message.content[len('testverify()')+1:].split()
+			text = message.content[len('/testverify')+1:].split()
 			std_id = text[0]
 			std_firstname = text[1]
 			std_lastname = text[2]

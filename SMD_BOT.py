@@ -5,6 +5,9 @@ from json import JSONEncoder
 import time
 import os.path
 import asyncio
+import mysql.connector
+from mysql.connector import connection
+from mysql.connector import errorcode
 from itertools import cycle
 from random import randint
 from urllib.request import Request, urlopen
@@ -24,7 +27,6 @@ def randomText_Hello():
     Words = ["สวัสดีเจ้า", "สวัสดีจ้า", "สวัสดีครับ", "สวัสดีค่ะ", "ສະບາຍດີ", "Annyeonghaseyo", "Kon'nichiwa", "Hello", "привет!", "ว่าไง", ";w;?",
              "Meow Meooww?", ":wave:", "https://giphy.com/gifs/capoo-halloween-3ov9k0OmfNYeLdK4gg", "Nǐ hǎo", "วอล ที ที วอล ที", "สวัสดีครั๊บบบบบบ!"]
     return Words[randint(0, len(Words)-1)] + " {0.author.mention}"
-
 
 class MyClient(discord.Client):
     async def on_ready(self):
@@ -56,27 +58,43 @@ class MyClient(discord.Client):
                 message.channel.send(
                     'ตอนนี้ระบบกำลังมีปัญหา ลองใหม่ในภายหลังนะครับ')
 
-            if (int(std_id) > 600000):
-                Con = response.json()
+            
+            Con = response.json()
 
-                api_res_id = Con["std"][std_id][0]["id"]
-                api_res_prefix = Con["std"][std_id][0]["prefix"]
-                api_res_firstname = Con["std"][std_id][0]["firstname"]
-                api_res_lastname = Con["std"][std_id][0]["lastname"]
-                api_res_grade = Con["std"][std_id][0]["grade"]
-                api_res_class = Con["std"][std_id][0]["class"]
+            api_res_id = Con["std"][std_id][0]["id"]
+            api_res_prefix = Con["std"][std_id][0]["prefix"]
+            api_res_firstname = Con["std"][std_id][0]["firstname"]
+            api_res_lastname = Con["std"][std_id][0]["lastname"]
+            api_res_grade = Con["std"][std_id][0]["grade"]
+            api_res_class = Con["std"][std_id][0]["class"]
 
-                await message.channel.send("USER: `" + user_id + " (" + message.author.display_name + ")`\nชื่อ: `" + api_res_firstname + "`\nนามสกุล: `" + api_res_lastname + "`\nระดับชั้น: `" + api_res_grade + "/" + api_res_class + "`")
+            await message.channel.send("USER: `" + user_id + " (" + message.author.display_name + ")`\nชื่อ: `" + api_res_firstname + "`\nนามสกุล: `" + api_res_lastname + "`\nระดับชั้น: `" + api_res_grade + "/" + api_res_class + "`")
 
-                # Data Match
-                if (api_res_firstname == std_firstname and api_res_lastname == std_lastname):
-                    # await message.author.edit(nick=api_res_prefix + " " + api_res_firstname + " " + api_res_lastname)
-                    await message.channel.send("Status: :white_check_mark:")
-                else:
-                    await message.channel.send("Status: :x:")
-            else:
-                await message.channel.send("USER: `" + user_id + " (" + message.author.display_name + ")`\nชื่อ: `" + std_firstname + "`\nนามสกุล: `" + std_lastname + "`\nระดับชั้น: `ศิษย์เก่า`")
+            # Data Match
+            if (api_res_firstname == std_firstname and api_res_lastname == std_lastname):
+
+                # await message.author.edit(nick="TEST")
+                # await message.author.edit(nick=api_res_prefix + " " + api_res_firstname + " " + api_res_lastname)
+
+
+                cnx = mysql.connector.connect(user='pondjaco', password='11032545', host='p0nd.ga', database='pondjaco_smdkku')
+                cursor = cnx.cursor()
+
+                query_func = ("UPDATE `std_2563_discordDB` SET `discord_user_id` = %s WHERE `id` = %s")
+                data_query = (message.author.id, text[0])
+
+                # Insert new employee
+                cursor.execute(query_func, data_query)
+                   
+                # Make sure data is committed to the database
+                cnx.commit()
+
+                cursor.close()
+                cnx.close()
+
                 await message.channel.send("Status: :white_check_mark:")
+            else:
+                await message.channel.send("Status: :x:")
 
         if message.content.startswith('/verify'):
             mess_input = message
@@ -91,7 +109,9 @@ class MyClient(discord.Client):
                 message.channel.send(
                     'ตอนนี้ระบบกำลังมีปัญหา ลองใหม่ในภายหลังนะครับ')
 
-            if (int(std_id) > 600000):
+            checkId = int(std_id);
+
+            if (checkId > 600000):
 
                 Con = response.json()
 
@@ -114,6 +134,22 @@ class MyClient(discord.Client):
                     role3 = discord.utils.get(
                         message.author.guild.roles, name="Student")
                     # await message.author.add_roles(abc.+)
+
+                    cnx = mysql.connector.connect(user='pondjaco', password='11032545', host='p0nd.ga', database='pondjaco_smdkku')
+                    cursor = cnx.cursor()
+
+                    query_func = ("UPDATE `std_2563_discordDB` SET `discord_user_id` = %s WHERE `id` = %s")
+                    data_query = (message.author.id, text[0])
+
+                    # Insert new employee
+                    cursor.execute(query_func, data_query)
+                   
+                    # Make sure data is committed to the database
+                    cnx.commit()
+
+                    cursor.close()
+                    cnx.close()
+                    
                     await message.author.edit(roles=[role, role2, role3])
                     # await message.author.change_nickname(api_res_prefix + " " + api_res_firstname + " " + api_res_lastname)
                 else:

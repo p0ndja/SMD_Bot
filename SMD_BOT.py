@@ -74,8 +74,6 @@ class MyClient(discord.Client):
             if (api_res_firstname == std_firstname and api_res_lastname == std_lastname):
 
                 # await message.author.edit(nick="TEST")
-                # await message.author.edit(nick=api_res_prefix + " " + api_res_firstname + " " + api_res_lastname)
-
 
                 cnx = mysql.connector.connect(user='pondjaco', password='11032545', host='p0nd.ga', database='pondjaco_smdkku')
                 cursor = cnx.cursor()
@@ -126,7 +124,6 @@ class MyClient(discord.Client):
 
                 # Data Match
                 if (api_res_firstname == std_firstname and api_res_lastname == std_lastname):
-                    await message.channel.send("Status: :white_check_mark:")
                     role = discord.utils.get(
                         message.author.guild.roles, name=api_res_grade + "/" + api_res_class)
                     role2 = discord.utils.get(
@@ -151,6 +148,8 @@ class MyClient(discord.Client):
                     cnx.close()
                     
                     await message.author.edit(roles=[role, role2, role3])
+                    await message.author.edit(nick=api_res_prefix + " " + api_res_firstname + " " + api_res_lastname)
+                    await message.channel.send("Status: :white_check_mark:")
                     # await message.author.change_nickname(api_res_prefix + " " + api_res_firstname + " " + api_res_lastname)
                 else:
                     await message.channel.send("Status: :x:")

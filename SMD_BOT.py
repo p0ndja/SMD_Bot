@@ -53,7 +53,7 @@ class MyClient(discord.Client):
             std_firstname = text[1]
             std_lastname = text[2]
 
-            response = requests.get("https://smd.pondja.com/api/student.php")
+            response = requests.get("https://smd.pondja.com/api/student")
             if response.status_code != 200:
                 message.channel.send(
                     'ตอนนี้ระบบกำลังมีปัญหา ลองใหม่ในภายหลังนะครับ')
@@ -102,7 +102,7 @@ class MyClient(discord.Client):
             std_firstname = text[1]
             std_lastname = text[2]
 
-            response = requests.get("https://smd.pondja.com/api/student.php")
+            response = requests.get("https://smd.pondja.com/api/student")
             if response.status_code != 200:
                 message.channel.send(
                     'ตอนนี้ระบบกำลังมีปัญหา ลองใหม่ในภายหลังนะครับ')

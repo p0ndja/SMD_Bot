@@ -50,8 +50,6 @@ class MyClient(discord.Client):
             user_id = str(message.author.id)
             text = message.content[len('/checkid')+1:].split()
             std_id = text[0]
-            std_firstname = text[1]
-            std_lastname = text[2]
 
             response = requests.get("https://smd.pondja.com/api/student")
             if response.status_code != 200:
@@ -60,7 +58,7 @@ class MyClient(discord.Client):
             
             checkId = int(std_id)
 
-            if (checkId > 610000)
+            if (checkId > 610000):
 
                 Con = response.json()
 
@@ -71,10 +69,10 @@ class MyClient(discord.Client):
                 api_res_grade = Con["std"][std_id][0]["grade"]
                 api_res_class = Con["std"][std_id][0]["class"]
 
-                await message.channel.send("USER: `" + user_id + " (" + message.author.display_name + ")`\nชื่อ: `" + api_res_firstname + "`\nนามสกุล: `" + api_res_lastname + "`\nระดับชั้น: `" + api_res_grade + "/" + api_res_class + "`")
+                await message.channel.send("Response: \nชื่อ: `" + api_res_firstname + "`\nนามสกุล: `" + api_res_lastname + "`\nระดับชั้น: `" + api_res_grade + "/" + api_res_class + "`")
             
-            else
-                await message.channel.send("USER: `" + user_id + " (" + message.author.display_name + ")`\nชื่อ: `" + std_firstname + "`\nนามสกุล: `" + std_lastname + "`\nระดับชั้น: `ศิษย์เก่า`")
+            else:
+                await message.channel.send("Response: \n`ศิษย์เก่า`")
 
         if message.content.startswith('/verify'):
             mess_input = message
@@ -89,7 +87,7 @@ class MyClient(discord.Client):
                 message.channel.send(
                     'ตอนนี้ระบบกำลังมีปัญหา ลองใหม่ในภายหลังนะครับ')
 
-            checkId = int(std_id);
+            checkId = int(std_id)
 
             if (checkId > 610000):
 

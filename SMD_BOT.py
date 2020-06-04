@@ -45,10 +45,10 @@ class MyClient(discord.Client):
             em.add_field(name="/verify", value="สำหรับยืนยันตัวตน")
             await message.channel.send(content=None, embed=em)
 
-        if message.content.startswith('/testverify'):
+        if message.content.startswith('/checkid'):
             mess_input = message
             user_id = str(message.author.id)
-            text = message.content[len('/testverify')+1:].split()
+            text = message.content[len('/checkid')+1:].split()
             std_id = text[0]
             std_firstname = text[1]
             std_lastname = text[2]
@@ -57,42 +57,24 @@ class MyClient(discord.Client):
             if response.status_code != 200:
                 message.channel.send(
                     'ตอนนี้ระบบกำลังมีปัญหา ลองใหม่ในภายหลังนะครับ')
-
             
-            Con = response.json()
+            checkId = int(std_id)
 
-            api_res_id = Con["std"][std_id][0]["id"]
-            api_res_prefix = Con["std"][std_id][0]["prefix"]
-            api_res_firstname = Con["std"][std_id][0]["firstname"]
-            api_res_lastname = Con["std"][std_id][0]["lastname"]
-            api_res_grade = Con["std"][std_id][0]["grade"]
-            api_res_class = Con["std"][std_id][0]["class"]
+            if (checkId > 610000)
 
-            await message.channel.send("USER: `" + user_id + " (" + message.author.display_name + ")`\nชื่อ: `" + api_res_firstname + "`\nนามสกุล: `" + api_res_lastname + "`\nระดับชั้น: `" + api_res_grade + "/" + api_res_class + "`")
+                Con = response.json()
 
-            # Data Match
-            if (api_res_firstname == std_firstname and api_res_lastname == std_lastname):
+                api_res_id = Con["std"][std_id][0]["id"]
+                api_res_prefix = Con["std"][std_id][0]["prefix"]
+                api_res_firstname = Con["std"][std_id][0]["firstname"]
+                api_res_lastname = Con["std"][std_id][0]["lastname"]
+                api_res_grade = Con["std"][std_id][0]["grade"]
+                api_res_class = Con["std"][std_id][0]["class"]
 
-                # await message.author.edit(nick="TEST")
-
-                cnx = mysql.connector.connect(user='pondjaco', password='11032545', host='p0nd.ga', database='pondjaco_smdkku')
-                cursor = cnx.cursor()
-
-                query_func = ("UPDATE `std_2563_discordDB` SET `discord_user_id` = %s WHERE `id` = %s")
-                data_query = (message.author.id, text[0])
-
-                # Insert new employee
-                cursor.execute(query_func, data_query)
-                   
-                # Make sure data is committed to the database
-                cnx.commit()
-
-                cursor.close()
-                cnx.close()
-
-                await message.channel.send("Status: :white_check_mark:")
-            else:
-                await message.channel.send("Status: :x:")
+                await message.channel.send("USER: `" + user_id + " (" + message.author.display_name + ")`\nชื่อ: `" + api_res_firstname + "`\nนามสกุล: `" + api_res_lastname + "`\nระดับชั้น: `" + api_res_grade + "/" + api_res_class + "`")
+            
+            else
+                await message.channel.send("USER: `" + user_id + " (" + message.author.display_name + ")`\nชื่อ: `" + std_firstname + "`\nนามสกุล: `" + std_lastname + "`\nระดับชั้น: `ศิษย์เก่า`")
 
         if message.content.startswith('/verify'):
             mess_input = message
@@ -109,7 +91,7 @@ class MyClient(discord.Client):
 
             checkId = int(std_id);
 
-            if (checkId > 600000):
+            if (checkId > 610000):
 
                 Con = response.json()
 

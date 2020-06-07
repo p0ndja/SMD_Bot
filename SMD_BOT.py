@@ -45,10 +45,10 @@ class MyClient(discord.Client):
             em.add_field(name="/verify", value="สำหรับยืนยันตัวตน")
             await message.channel.send(content=None, embed=em)
 
-        if message.content.startswith('/checkid'):
+        if message.content.startswith('/checkid '):
             mess_input = message
             user_id = str(message.author.id)
-            text = message.content[len('/checkid')+1:].split()
+            text = message.content[len('/checkid '):].split()
             std_id = text[0]
 
             response = requests.get("https://smd.pondja.com/api/student")
@@ -74,10 +74,10 @@ class MyClient(discord.Client):
             else:
                 await message.channel.send("Response: \n`ศิษย์เก่า`")
 
-        if message.content.startswith('/verify'):
+        if message.content.startswith('/verify '):
             mess_input = message
             user_id = str(message.author.id)
-            text = message.content[len('/verify')+1:].split()
+            text = message.content[len('/verify '):].split()
             std_id = text[0]
             std_firstname = text[1]
             std_lastname = text[2]

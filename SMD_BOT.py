@@ -128,6 +128,7 @@ class MyClient(discord.Client):
                     api_res_prefix = Con["std"][std_id][0]["prefix"]
                     api_res_firstname = Con["std"][std_id][0]["firstname"]
                     api_res_lastname = Con["std"][std_id][0]["lastname"]
+                    api_res_lastname_forValidate = Con["std"][std_id][0]["lastname"].split()[0]
                     api_res_grade = Con["std"][std_id][0]["grade"]
                     api_res_class = Con["std"][std_id][0]["class"]
 
@@ -168,13 +169,14 @@ class MyClient(discord.Client):
                     api_res_prefix = Con["std"][std_id][0]["prefix"]
                     api_res_firstname = Con["std"][std_id][0]["firstname"]
                     api_res_lastname = Con["std"][std_id][0]["lastname"]
+                    api_res_lastname_forValidate = Con["std"][std_id][0]["lastname"].split()[0]
                     api_res_grade = Con["std"][std_id][0]["grade"]
                     api_res_class = Con["std"][std_id][0]["class"]
 
                     await message.channel.send("USER: `" + user_id + " (" + message.author.display_name + ")`\nชื่อ: `" + api_res_firstname + "`\nนามสกุล: `" + api_res_lastname + "`\nระดับชั้น: `" + api_res_grade + "/" + api_res_class + "`")
 
                     # Data Match
-                    if (api_res_firstname == std_firstname and api_res_lastname == std_lastname):
+                    if (api_res_firstname == std_firstname and api_res_lastname_forValidate == std_lastname):
                         role = discord.utils.get(
                             message.author.guild.roles, name=api_res_grade + "/" + api_res_class)
                         role2 = discord.utils.get(
@@ -197,9 +199,19 @@ class MyClient(discord.Client):
 
                         cursor.close()
                         cnx.close()
+
+                        newprefix = ""
+                        if (api_res_prefix == "เด็กชาย"):
+                            newprefix = "ด.ช."
+                        elif (api_res_prefix == "เด็กหญิง"):
+                            newprefix = "ด.ญ."
+                        elif (api_res_prefix == "นางสาว"):
+                            newprefix = "น.ส."
+                        else:
+                            newprefix = api_res_prefix
                         
                         await message.author.edit(roles=[role, role2, role3])
-                        await message.author.edit(nick=api_res_prefix + " " + api_res_firstname + " " + api_res_lastname)
+                        await message.author.edit(nick=newprefix + api_res_firstname + " " + api_res_lastname)
                         await message.channel.send("Status: :white_check_mark:")
                         # await message.author.change_nickname(api_res_prefix + " " + api_res_firstname + " " + api_res_lastname)
 

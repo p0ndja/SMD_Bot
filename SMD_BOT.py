@@ -85,7 +85,7 @@ class MyClient(discord.Client):
                     api_res_class = Con["std"][std_id][0]["class"]
 
                     await message.channel.send("USER: `" + user_id + " (" + message.author.display_name + ")`\nชื่อ: `" + api_res_firstname + "`\nนามสกุล: `" + api_res_lastname + "`\nระดับชั้น: `" + api_res_grade + "/" + api_res_class + "`")
-                    await message.channel.send("INPUT:\n id: `" + text[0] + "` | `" + api_res_id + "`\n firstname: `" + text[1] + "` | `" + api_res_firstname + "`\n lastname: `" + text[2] + "` | `" + api_res_lastname)
+                    await message.channel.send("INPUT:\n id: `" + text[0] + "` | `" + api_res_id + "`\n firstname: `" + text[1] + "` | `" + api_res_firstname + "`\n lastname: `" + text[2] + "` | `" + api_res_lastname +"`")
 
                     # Data Match
                     if (api_res_firstname == std_firstname and api_res_lastname == std_lastname):

@@ -262,8 +262,7 @@ class MyClient(discord.Client):
         for Mem in message.mentions:
             if self.user.name == Mem.display_name:
                 for i in range(1,10):
-                	await message.channel.send(randomText_Mention().format(message))
-			break
+                    await message.channel.send(randomText_Mention().format(message))
 
     async def on_guild_join(guild):
         await guild.system_channel.send("กราบสวัสดีพ่อแม่พี่น้องครับ")

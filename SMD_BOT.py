@@ -243,6 +243,8 @@ class MyClient(discord.Client):
                     role2 = discord.utils.get(
                         message.author.guild.roles, name="Student")
                     await message.author.edit(roles=[role, role2])
+            
+            await message.delete()
 
         if message.content.lower().startswith('/verify'):
             mess_input = message

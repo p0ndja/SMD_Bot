@@ -60,9 +60,9 @@ class MyClient(discord.Client):
         await client.change_presence(activity=discord.Game(name='รอเด็กมาโรงเรียน'))
 
     async def on_message(self, message):
-        if message.content.startswith('/hello'):
+        if message.content.lower().startswith('/hello'):
             await message.channel.send(randomText_Hello().format(message))
-        if message.content.startswith('/help') or message.content.startswith('!help'):
+        if message.content.lower().startswith('/help') or message.content.lower().startswith('!help'):
             em = discord.Embed(title="สิ่งที่น้องทำได้",
                                description="มีแค่นี้แหละ")
             em.add_field(name="/help", value="ก็ที่ทำอยู่ตอนนี้แหละ")
@@ -70,7 +70,7 @@ class MyClient(discord.Client):
             em.add_field(name="/verify", value="สำหรับยืนยันตัวตน")
             await message.channel.send(content=None, embed=em)
 
-        if message.content.startswith('/testverify'):
+        if message.content.lower().startswith('/testverify'):
             mess_input = message
             user_id = str(message.author.id)
             text = message.content[len('/testverify'):].split()
@@ -78,9 +78,9 @@ class MyClient(discord.Client):
             std_firstname = text[1]
             std_lastname = text[2]
 
-            response = requests.get("https://smd.pondja.com/api/student")
-            print("GET `https://smd.pondja.com/api/student`")
-            await client.get_channel(701042885931565156).send("GET `https://smd.pondja.com/api/student`")
+            response = requests.get("https://smd.p0nd.ga/api/student")
+            print("GET `https://smd.p0nd.ga/api/student`")
+            await client.get_channel(701042885931565156).send("GET `https://smd.p0nd.ga/api/student`")
 
             if response.status_code != 200:
                 message.channel.send(
@@ -118,15 +118,15 @@ class MyClient(discord.Client):
                 await message.channel.send("USER: `" + user_id + " (" + message.author.display_name + ")`\nชื่อ: `" + std_firstname + "`\nนามสกุล: `" + std_lastname + "`\nระดับชั้น: `ศิษย์เก่า`")
                 await message.channel.send("Status: :white_check_mark:")
 
-        if message.content.startswith('/checkid'):
+        if message.content.lower().startswith('/checkid'):
             mess_input = message
             user_id = str(message.author.id)
             text = message.content[len('/checkid'):].split()
             std_id = text[0]
 
-            response = requests.get("https://smd.pondja.com/api/student")
-            print("GET `https://smd.pondja.com/api/student`")
-            await client.get_channel(701042885931565156).send("GET `https://smd.pondja.com/api/student`")
+            response = requests.get("https://smd.p0nd.ga/api/student")
+            print("GET `https://smd.p0nd.ga/api/student`")
+            await client.get_channel(701042885931565156).send("GET `https://smd.p0nd.ga/api/student`")
 
             if response.status_code != 200:
                 message.channel.send(
@@ -158,7 +158,7 @@ class MyClient(discord.Client):
             else:
                 await message.channel.send("Response: \n`ศิษย์เก่า`")
 
-        if message.content.startswith('/verify'):
+        if message.content.lower().startswith('/verify'):
             mess_input = message
             user_id = str(message.author.id)
             text = message.content[len('/verify'):].split()
@@ -166,9 +166,9 @@ class MyClient(discord.Client):
             std_firstname = text[1]
             std_lastname = text[2]
 
-            response = requests.get("https://smd.pondja.com/api/student")
-            print("GET `https://smd.pondja.com/api/student`")
-            await client.get_channel(701042885931565156).send("GET `https://smd.pondja.com/api/student`")
+            response = requests.get("https://smd.p0nd.ga/api/student")
+            print("GET `https://smd.p0nd.ga/api/student`")
+            await client.get_channel(701042885931565156).send("GET `https://smd.p0nd.ga/api/student`")
             if response.status_code != 200:
                 message.channel.send(
                     'ตอนนี้ระบบกำลังมีปัญหา ลองใหม่ในภายหลังนะครับ')
@@ -251,19 +251,19 @@ class MyClient(discord.Client):
                     message.author.guild.roles, name="Student")
                 await message.author.edit(roles=[role, role2])
 
-        if message.content.startswith('/announce'):
+        if message.content.lower().startswith('/announce'):
             Mes_Str = message.content[len('/announce')+1:]
             channel = client.get_channel(700718680333615154)
             await message.delete()
             await channel.send("@everyone\n"+Mes_Str)
 
-        if message.content.startswith('/update'):
+        if message.content.lower().startswith('/update'):
             Mes_Str = message.content[len('/update')+1:]
             channel = client.get_channel(700875375651192832)
             await message.delete()
             await channel.send("@everyone\n"+Mes_Str)
 
-        if message.content.startswith('say('):
+        if message.content.lower().startswith('say('):
             Str_Content = message.content
             await message.delete()
             # Say(4412) ไอ้นี้มันอู้งานครับบ
@@ -276,7 +276,7 @@ class MyClient(discord.Client):
                     await channel.send(Str_Content[Id_channel+i+2:])
                     break
 
-        if message.content.startswith('/guest'):
+        if message.content.lower().startswith('/guest'):
             namae = str(message.author.id)
             GUILD = None
             try:

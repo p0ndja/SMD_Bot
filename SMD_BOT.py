@@ -204,7 +204,7 @@ class MyClient(discord.Client):
                         cursor = cnx.cursor()
 
                         query_func = ("UPDATE `std_2563_discordDB` SET `discord_user_id` = %s WHERE `id` = %s")
-                        data_query = (Mem.id, text[0])
+                        data_query = (Mem.id, text[1])
 
                         # Insert new employee
                         cursor.execute(query_func, data_query)

@@ -44,7 +44,7 @@ def randomText_Mention():
             ,"คุณพี่อยู่จังหวัดอะไรคะ","คุณพี่อยู่จังหวัดอะไรค้าาาาาาาาา!!??","ณ จุดจุดนี้หนาคะะะะ","ปวดเฮ้ดดดดดดด","สตรองงงงงง","นี่ก็ขยี้จัง","อย่าให้รู้นะว่าแอบไปเล่นเกมส์หลังมอ","อย่าให้รู้นะว่าโดดซ้อมสแตน","อย่าให้รู้นะว่าแอบกินหนม ทำไมไม่แบ่งเราบ้าง","อย่าให้รู้นะว่าแอบกินหนม","เรื่องนี้ถึง","ห่วงมาก ทำไมไม่ถือเอาไว้ให้ดี ๆ เลือกเอาละกัน ถ้าไม่อยากเสียใจทีหลัง ก็รักษามันไว้ ตอนที่มีโอกาสอยู่ หรือจะเก็บมันขึ้นมาใหม่ เเต่มันก็ไม่เหมือนเดิมเเล้วนะ","https://giphy.com/gifs/capoo-cat-3ov9jZ0V6gOO0oa98Y","ช่วงนี้ระวังหน่อย...เห็นร้ายใครบ่อย ๆ"
             ,"https://giphy.com/gifs/meme-capoo-bugcat-JsVlBMEaHdOEGQKLXB","https://giphy.com/gifs/cat-capoo-bugcat-3o7bufrhglm1BTsfra","https://giphy.com/gifs/animation-capoo-bugcat-l4FGpa3DuEFMrghKE","https://giphy.com/gifs/capoo-3ov9jPBQ1UJRNS8MDe","https://giphy.com/gifs/wiggle-shaq-13CoXDiaCcCoyk","https://giphy.com/gifs/cat-humour-funny-ICOgUNjpvO0PC","https://giphy.com/gifs/minecraft-25oFarLxPqrNS","https://giphy.com/gifs/absurdnoise-halloween-4-5TOidpBAJBnQA"
             ,"เป็นปลื้มมมมมมมมมม","ว้าว","ว้าวววว","おまえ わ もう しんでいる","😒","😜","🙄","死ぬ","オラオラオラオラオラオラオラオラオラオラオラオラオラオラオラオラオラオラオラオラオラ","オラオラオラオラオラオラ","รู้นะว่าเหงา","รู้นะว่าเหงาแหละ ดูออก","เหงาแหละดูออก","คนไม่ดี","คนเฬว","คนดจีย์","ดจีย์~","คนดี","โรงเรียนเดียวกับเราเลย แต่ทำไมเราไม่เคยเห็นเธอเลยล่ะ","แกมาทำอะไรเอาตอนนี้","ไม่รักไม่ต้องมาแคร์ไม่ต้องมาดีกับฉัน"
-            ,"*ฉันก็แค่อยากวิ่ง ... แต่ไม่อยากเหนื่อย* -- **สิริกร แก้วโคตร**","ถ้าเค้ารักแกจริง เค้าก็จะหาทางอยู่กับแกได้เองแหละ","No Comment"]
+            ,"*ฉันก็แค่อยากวิ่ง ... แต่ไม่อยากเหนื่อย* -- **สิริกร แก้วโคตร**","ถ้าเค้ารักแกจริง เค้าก็จะหาทางอยู่กับแกได้เองแหละ","No Comment","ถามว่าเรียนกี่โมง อยากจะไปส่ง ชิมิชิมิ","บอกเธอว่าไม่เป็นไร แต่ว่าในใจ ได้สิได้สิ"]
     return Words[randint(0, len(Words)-1)] + " {0.author.mention}"
 
 def randomText_Hello():
@@ -157,8 +157,52 @@ class MyClient(discord.Client):
                     await client.get_channel(701042885931565156).send("RES `" + str(Con["std"][std_id][0]) + "`")
             else:
                 await message.channel.send("Response: \n`ศิษย์เก่า`")
-        
-        if message.content.startswith('/forceverify'):
+
+        if message.content.lower().startswith('/stats'):
+            await message.delete()
+            
+            duplicate_student = 3
+            duplicate_teacher = 1
+
+            m1 = len(discord.utils.get(message.author.guild.roles, name="M:1").members)
+            m2 = len(discord.utils.get(message.author.guild.roles, name="M:2").members)
+            m3 = len(discord.utils.get(message.author.guild.roles, name="M:3").members)
+            m4 = len(discord.utils.get(message.author.guild.roles, name="M:4").members)
+            m5 = len(discord.utils.get(message.author.guild.roles, name="M:5").members)
+            m6 = len(discord.utils.get(message.author.guild.roles, name="M:6").members)
+            m11 = len(discord.utils.get(message.author.guild.roles, name="1/1").members)
+            m12 = len(discord.utils.get(message.author.guild.roles, name="1/2").members)
+            m13 = len(discord.utils.get(message.author.guild.roles, name="1/3").members)
+            m14 = len(discord.utils.get(message.author.guild.roles, name="1/4").members)
+            m21 = len(discord.utils.get(message.author.guild.roles, name="2/1").members)
+            m22 = len(discord.utils.get(message.author.guild.roles, name="2/2").members)
+            m23 = len(discord.utils.get(message.author.guild.roles, name="2/3").members)
+            m24 = len(discord.utils.get(message.author.guild.roles, name="2/4").members)
+            m31 = len(discord.utils.get(message.author.guild.roles, name="3/1").members)
+            m32 = len(discord.utils.get(message.author.guild.roles, name="3/2").members)
+            m33 = len(discord.utils.get(message.author.guild.roles, name="3/3").members)
+            m34 = len(discord.utils.get(message.author.guild.roles, name="3/4").members)
+            m41 = len(discord.utils.get(message.author.guild.roles, name="4/1").members)
+            m42 = len(discord.utils.get(message.author.guild.roles, name="4/2").members)
+            m43 = len(discord.utils.get(message.author.guild.roles, name="4/3").members)
+            m44 = len(discord.utils.get(message.author.guild.roles, name="4/4").members)
+            m45 = len(discord.utils.get(message.author.guild.roles, name="4/5").members)
+            m51 = len(discord.utils.get(message.author.guild.roles, name="5/1").members)
+            m52 = len(discord.utils.get(message.author.guild.roles, name="5/2").members)
+            m53 = len(discord.utils.get(message.author.guild.roles, name="5/3").members)
+            m54 = len(discord.utils.get(message.author.guild.roles, name="5/4").members)
+            m55 = len(discord.utils.get(message.author.guild.roles, name="5/5").members)
+            m61 = len(discord.utils.get(message.author.guild.roles, name="6/1").members)
+            m62 = len(discord.utils.get(message.author.guild.roles, name="6/2").members)
+            m63 = len(discord.utils.get(message.author.guild.roles, name="6/3").members)
+            m64 = len(discord.utils.get(message.author.guild.roles, name="6/4").members)
+            m65 = len(discord.utils.get(message.author.guild.roles, name="6/5").members)
+            alum = len(discord.utils.get(message.author.guild.roles, name="ศิษย์เก่า").members)
+            student = m1 + m2 + m3 + m4 + m5 + m6
+            teacher = len(discord.utils.get(message.author.guild.roles, name="Teacher").members)
+            await message.channel.send("[**สถิติ - STATS**]:\n\nม.1 `" + str(m1) + "`คน\n- ม.1/1 `" + str(m11) + "`คน\n- ม.1/2 `" + str(m12) + "`คน\n- ม.1/3 `" + str(m13) + "`คน\n- ม.1/4 `" + str(m14) + "`คน\n\nม.2 `" + str(m2) + "`คน\n- ม.2/1 `" + str(m21) + "`คน\n- ม.2/2 `" + str(m22) + "`คน\n- ม.2/3 `" + str(m33) + "`คน\n- ม.2/4 `" + str(m24) + "`คน\n\nม.3 `" + str(m3) + "`คน\n- ม.3/1 `" + str(m31) + "`คน\n- ม.3/2 `" + str(m32) + "`คน\n- ม.3/3 `" + str(m33) + "`คน\n- ม.3/4 `" + str(m34) + "` คน\n\nม.4 `" + str(m4) + "`คน\n- ม.4/1 `" + str(m41) + "`คน\n- ม.4/2 `" + str(m42) + "`คน\n- ม.4/3 `" + str(m43) + "`คน\n- ม.4/4 `" + str(m44) + "`คน\n- ม.4/5 `" + str(m45) + "`คน\n\nม.5 `" + str(m5) + "`คน\n- ม.5/1 `" + str(m51) + "`คน\n- ม.5/2 `" + str(m52) + "`คน\n- ม.5/3 `" + str(m53) + "`คน\n- ม.5/4 `" + str(m54) + "`คน\n- ม.5/5 `" + str(m55) + "`คน\n\nม.6 `" + str(m6) + "`คน\n- ม.6/1 `" + str(m61) + "`คน\n- ม.6/2 `" + str(m62) + "`คน\n- ม.6/3 `" + str(m63) + "`คน\n- ม.6/4 `" + str(m64) + "`คน\n- ม.6/5 `" + str(m65) + "`คน" + "\nคนรวมนักเรียนทั้งหมด `" + str(student) + "` คน\nศิษย์เก่า `" + str(alum) + "` คน\n\nอาจารย์ทั้งหมด `" + str(teacher) + "` ท่าน\n\nหมายเหตุ:\n - มีนักเรียนที่มีมากกว่า 1 บัญชีทั้งสิ้น `" + str(duplicate_student) + "` คน\n - มีอาจารย์ที่มีมากกว่า 1 บัญชีทั้งสิ้น `" + str(duplicate_teacher) + "` ท่าน")
+
+        if message.content.lower().startswith('/forceverify'):
             text = message.content[len('/forceverify'):].split()
             
             std_id = text[1]

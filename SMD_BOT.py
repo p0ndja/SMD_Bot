@@ -371,6 +371,7 @@ class MyClient(discord.Client):
                         await client.get_channel(701042885931565156).send("new verify member: `" + std_id + "`")
                     else:
                         await message.channel.send("Status: :x:")
+                        await message.channel.send("โปรดมั่นใจว่าคุณพิมพ์ในรูปแบบ\n`/verify รหัสนักเรียน ชื่อ สกุล`")
                     print("RES " + str(Con["std"][std_id][0]))
                     await client.get_channel(701042885931565156).send("RES `" + str(Con["std"][std_id][0]) + "`")
 

@@ -87,36 +87,31 @@ class MyClient(discord.Client):
                     'ตอนนี้ระบบกำลังมีปัญหา ลองใหม่ในภายหลังนะครับ')
 
             checkId = int(std_id)
+            Con = response.json()
 
-            if (checkId > 610000):
-
-                Con = response.json()
-
-                if std_id not in Con["std"]:
-                    await message.channel.send('ไม่พบรหัสนักเรียน `' + std_id + "`")
-                    print("RES not_found")
-                    await client.get_channel(701042885931565156).send("RES `not_found`")
-                else:
-                    api_res_id = Con["std"][std_id][0]["id"]
-                    api_res_prefix = Con["std"][std_id][0]["prefix"]
-                    api_res_firstname = Con["std"][std_id][0]["firstname"]
-                    api_res_lastname = Con["std"][std_id][0]["lastname"]
-                    api_res_grade = Con["std"][std_id][0]["grade"]
-                    api_res_class = Con["std"][std_id][0]["class"]
-
-                    await message.channel.send("USER: `" + user_id + " (" + message.author.display_name + ")`\nชื่อ: `" + api_res_firstname + "`\nนามสกุล: `" + api_res_lastname + "`\nระดับชั้น: `" + api_res_grade + "/" + api_res_class + "`")
-                    await message.channel.send("INPUT:\n id: `" + text[0] + "` | `" + api_res_id + "`\n firstname: `" + text[1] + "` | `" + api_res_firstname + "`\n lastname: `" + text[2] + "` | `" + api_res_lastname +"`")
-
-                    # Data Match
-                    if (api_res_firstname == std_firstname and api_res_lastname == std_lastname):
-                        await message.channel.send("Status: :white_check_mark:")
-                    else:
-                        await message.channel.send("Status: :x:")
-                    print("RES " + str(Con["std"][std_id][0]))
-                    await client.get_channel(701042885931565156).send("RES `" + str(Con["std"][std_id][0]) + "`")
+            if std_id not in Con["std"]:
+                await message.channel.send('ไม่พบรหัสนักเรียน `' + std_id + "`")
+                print("RES not_found")
+                await client.get_channel(701042885931565156).send("RES `not_found`")
             else:
-                await message.channel.send("USER: `" + user_id + " (" + message.author.display_name + ")`\nชื่อ: `" + std_firstname + "`\nนามสกุล: `" + std_lastname + "`\nระดับชั้น: `ศิษย์เก่า`")
-                await message.channel.send("Status: :white_check_mark:")
+                api_res_id = Con["std"][std_id][0]["id"]
+                api_res_prefix = Con["std"][std_id][0]["prefix"]
+                api_res_firstname = Con["std"][std_id][0]["firstname"]
+                api_res_lastname = Con["std"][std_id][0]["lastname"]
+                api_res_grade = Con["std"][std_id][0]["grade"]
+                api_res_class = Con["std"][std_id][0]["class"]
+
+                await message.channel.send("USER: `" + user_id + " (" + message.author.display_name + ")`\nชื่อ: `" + api_res_firstname + "`\nนามสกุล: `" + api_res_lastname + "`\nระดับชั้น: `" + api_res_grade + "/" + api_res_class + "`")
+                await message.channel.send("INPUT:\n id: `" + text[0] + "` | `" + api_res_id + "`\n firstname: `" + text[1] + "` | `" + api_res_firstname + "`\n lastname: `" + text[2] + "` | `" + api_res_lastname +"`")
+
+                # Data Match
+                if (api_res_firstname == std_firstname and api_res_lastname == std_lastname):
+                    await message.channel.send("Status: :white_check_mark:")
+                else:
+                    await message.channel.send("Status: :x:")
+                print("RES " + str(Con["std"][std_id][0]))
+                await client.get_channel(701042885931565156).send("RES `" + str(Con["std"][std_id][0]) + "`")
+
 
         if message.content.lower().startswith('/checkid'):
             mess_input = message
@@ -133,30 +128,25 @@ class MyClient(discord.Client):
                     'ตอนนี้ระบบกำลังมีปัญหา ลองใหม่ในภายหลังนะครับ')
             
             checkId = int(std_id)
+            Con = response.json()
 
-            if (checkId > 610000):
+            if std_id not in Con["std"]:
+                await message.channel.send('ไม่พบรหัสนักเรียน `' + std_id + "`")
+                print("RES not_found")
+                await client.get_channel(701042885931565156).send("RES `not_found`")
 
-                Con = response.json()
-
-                if std_id not in Con["std"]:
-                    await message.channel.send('ไม่พบรหัสนักเรียน `' + std_id + "`")
-                    print("RES not_found")
-                    await client.get_channel(701042885931565156).send("RES `not_found`")
-
-                else:
-                    api_res_id = Con["std"][std_id][0]["id"]
-                    api_res_prefix = Con["std"][std_id][0]["prefix"]
-                    api_res_firstname = Con["std"][std_id][0]["firstname"]
-                    api_res_lastname = Con["std"][std_id][0]["lastname"]
-                    api_res_lastname_forValidate = Con["std"][std_id][0]["lastname"].split()[0]
-                    api_res_grade = Con["std"][std_id][0]["grade"]
-                    api_res_class = Con["std"][std_id][0]["class"]
-
-                    await message.channel.send("Response: \nชื่อ: `" + api_res_firstname + "`\nนามสกุล: `" + api_res_lastname + "`\nระดับชั้น: `" + api_res_grade + "/" + api_res_class + "`")
-                    print("RES " + str(Con["std"][std_id][0]))
-                    await client.get_channel(701042885931565156).send("RES `" + str(Con["std"][std_id][0]) + "`")
             else:
-                await message.channel.send("Response: \n`ศิษย์เก่า`")
+                api_res_id = Con["std"][std_id][0]["id"]
+                api_res_prefix = Con["std"][std_id][0]["prefix"]
+                api_res_firstname = Con["std"][std_id][0]["firstname"]
+                api_res_lastname = Con["std"][std_id][0]["lastname"]
+                api_res_lastname_forValidate = Con["std"][std_id][0]["lastname"].split()[0]
+                api_res_grade = Con["std"][std_id][0]["grade"]
+                api_res_class = Con["std"][std_id][0]["class"]
+
+                await message.channel.send("Response: \nชื่อ: `" + api_res_firstname + "`\nนามสกุล: `" + api_res_lastname + "`\nระดับชั้น: `" + api_res_grade + "/" + api_res_class + "`")
+                print("RES " + str(Con["std"][std_id][0]))
+                await client.get_channel(701042885931565156).send("RES `" + str(Con["std"][std_id][0]) + "`")
 
         if message.content.lower().startswith('/stats'):
             await message.delete()
@@ -216,77 +206,68 @@ class MyClient(discord.Client):
 
             checkId = int(std_id)
 
-            if (checkId > 610000):
-                Con = response.json()
+            Con = response.json()
 
-                if std_id not in Con["std"]:
-                    await message.channel.send('ไม่พบรหัสนักเรียน `' + std_id + "`")
-                    print("RES not_found")
-                    await client.get_channel(701042885931565156).send("RES `not_found`")
+            if std_id not in Con["std"]:
+                await message.channel.send('ไม่พบรหัสนักเรียน `' + std_id + "`")
+                print("RES not_found")
+                await client.get_channel(701042885931565156).send("RES `not_found`")
 
-                else:
-                    for Mem in message.mentions:                        
-                        api_res_id = Con["std"][std_id][0]["id"]
-                        api_res_prefix = Con["std"][std_id][0]["prefix"]
-                        api_res_firstname = Con["std"][std_id][0]["firstname"]
-                        api_res_lastname = Con["std"][std_id][0]["lastname"]
-                        api_res_lastname_forValidate = Con["std"][std_id][0]["lastname"].split()[0]
-                        api_res_grade = Con["std"][std_id][0]["grade"]
-                        api_res_class = Con["std"][std_id][0]["class"]
-
-                        await message.channel.send("ชื่อ: `" + api_res_firstname + "`\nนามสกุล: `" + api_res_lastname + "`\nระดับชั้น: `" + api_res_grade + "/" + api_res_class + "`")
-
-                        role = discord.utils.get(
-                            Mem.guild.roles, name=api_res_grade + "/" + api_res_class)
-                        role2 = discord.utils.get(
-                            Mem.guild.roles, name="M:" + api_res_grade)
-                        role3 = discord.utils.get(
-                            Mem.guild.roles, name="Student")
-                        # await Mem.add_roles(abc.+)
-
-                        cnx = mysql.connector.connect(user='pondjaco', password='11032545', host='p0nd.ga', database='pondjaco_smdkku')
-                        cursor = cnx.cursor()
-
-                        query_func = ("UPDATE `std_2563_discordDB` SET `discord_user_id` = %s WHERE `id` = %s")
-                        data_query = (Mem.id, text[1])
-
-                        # Insert new employee
-                        cursor.execute(query_func, data_query)
-                    
-                        # Make sure data is committed to the database
-                        cnx.commit()
-
-                        cursor.close()
-                        cnx.close()
-
-                        newprefix = ""
-                        if (api_res_prefix == "เด็กชาย"):
-                            newprefix = "ด.ช."
-                        elif (api_res_prefix == "เด็กหญิง"):
-                            newprefix = "ด.ญ."
-                        elif (api_res_prefix == "นางสาว"):
-                            newprefix = "น.ส."
-                        else:
-                            newprefix = api_res_prefix
-                        
-                        await Mem.edit(roles=[role, role2, role3])
-                        await Mem.edit(nick=newprefix + api_res_firstname + " " + api_res_lastname)
-                        await message.channel.send("Status: :white_check_mark:")
-                        # await Mem.change_nickname(api_res_prefix + " " + api_res_firstname + " " + api_res_lastname)
-
-                        print("new verify member: " + std_id)
-                        await client.get_channel(701042885931565156).send("new verify member: `" + std_id + "`")
-                        break
-                    
             else:
-                for Mem in message.mentions:
-                    await message.channel.send("ชื่อ: `" + Mem.display_name + "`\nระดับชั้น: `ศิษย์เก่า`")
-                    await message.channel.send("Status: :white_check_mark:")
+                for Mem in message.mentions:                        
+                    api_res_id = Con["std"][std_id][0]["id"]
+                    api_res_prefix = Con["std"][std_id][0]["prefix"]
+                    api_res_firstname = Con["std"][std_id][0]["firstname"]
+                    api_res_lastname = Con["std"][std_id][0]["lastname"]
+                    api_res_lastname_forValidate = Con["std"][std_id][0]["lastname"].split()[0]
+                    api_res_grade = Con["std"][std_id][0]["grade"]
+                    api_res_class = Con["std"][std_id][0]["class"]
+
+                    await message.channel.send("ชื่อ: `" + api_res_firstname + "`\nนามสกุล: `" + api_res_lastname + "`\nระดับชั้น: `" + api_res_grade + "/" + api_res_class + "`")
+
                     role = discord.utils.get(
-                        message.author.guild.roles, name="ศิษย์เก่า")
+                        Mem.guild.roles, name=api_res_grade + "/" + api_res_class)
                     role2 = discord.utils.get(
-                        message.author.guild.roles, name="Student")
-                    await message.author.edit(roles=[role, role2])
+                        Mem.guild.roles, name="M:" + api_res_grade)
+                    role3 = discord.utils.get(
+                        Mem.guild.roles, name="Student")
+                    # await Mem.add_roles(abc.+)
+
+                    cnx = mysql.connector.connect(user='pondjaco', password='11032545', host='p0nd.ga', database='pondjaco_smdkku')
+                    cursor = cnx.cursor()
+
+                    query_func = ("UPDATE `std_2563_discordDB` SET `discord_user_id` = %s WHERE `id` = %s")
+                    data_query = (Mem.id, text[1])
+
+                    # Insert new employee
+                    cursor.execute(query_func, data_query)
+                
+                    # Make sure data is committed to the database
+                    cnx.commit()
+
+                    cursor.close()
+                    cnx.close()
+
+                    newprefix = ""
+                    if (api_res_prefix == "เด็กชาย"):
+                        newprefix = "ด.ช."
+                    elif (api_res_prefix == "เด็กหญิง"):
+                        newprefix = "ด.ญ."
+                    elif (api_res_prefix == "นางสาว"):
+                        newprefix = "น.ส."
+                    else:
+                        newprefix = api_res_prefix
+                    
+                    await Mem.edit(roles=[role, role2, role3])
+                    await Mem.edit(nick=newprefix + api_res_firstname + " " + api_res_lastname)
+                    await message.channel.send("Status: :white_check_mark:")
+                    # await Mem.change_nickname(api_res_prefix + " " + api_res_firstname + " " + api_res_lastname)
+
+                    print("new verify member: " + std_id)
+                    await client.get_channel(701042885931565156).send("new verify member: `" + std_id + "`")
+                    break
+                    
+            
             
             await message.delete()
 
@@ -307,81 +288,70 @@ class MyClient(discord.Client):
 
             checkId = int(std_id)
 
-            if (checkId > 610000):
+            Con = response.json()
 
-                Con = response.json()
-
-                if std_id not in Con["std"]:
-                    await message.channel.send('ไม่พบรหัสนักเรียน `' + std_id + "`")
-                    print("RES not_found")
-                    await client.get_channel(701042885931565156).send("RES `not_found`")
-
-                else:
-                    api_res_id = Con["std"][std_id][0]["id"]
-                    api_res_prefix = Con["std"][std_id][0]["prefix"]
-                    api_res_firstname = Con["std"][std_id][0]["firstname"]
-                    api_res_lastname = Con["std"][std_id][0]["lastname"]
-                    api_res_lastname_forValidate = Con["std"][std_id][0]["lastname"].split()[0]
-                    api_res_grade = Con["std"][std_id][0]["grade"]
-                    api_res_class = Con["std"][std_id][0]["class"]
-
-                    await message.channel.send("USER: `" + user_id + " (" + message.author.display_name + ")`\nชื่อ: `" + api_res_firstname + "`\nนามสกุล: `" + api_res_lastname + "`\nระดับชั้น: `" + api_res_grade + "/" + api_res_class + "`")
-
-                    # Data Match
-                    if (api_res_firstname == std_firstname and api_res_lastname_forValidate == std_lastname):
-                        role = discord.utils.get(
-                            message.author.guild.roles, name=api_res_grade + "/" + api_res_class)
-                        role2 = discord.utils.get(
-                            message.author.guild.roles, name="M:" + api_res_grade)
-                        role3 = discord.utils.get(
-                            message.author.guild.roles, name="Student")
-                        # await message.author.add_roles(abc.+)
-
-                        cnx = mysql.connector.connect(user='pondjaco', password='11032545', host='p0nd.ga', database='pondjaco_smdkku')
-                        cursor = cnx.cursor()
-
-                        query_func = ("UPDATE `std_2563_discordDB` SET `discord_user_id` = %s WHERE `id` = %s")
-                        data_query = (message.author.id, text[0])
-
-                        # Insert new employee
-                        cursor.execute(query_func, data_query)
-                    
-                        # Make sure data is committed to the database
-                        cnx.commit()
-
-                        cursor.close()
-                        cnx.close()
-
-                        newprefix = ""
-                        if (api_res_prefix == "เด็กชาย"):
-                            newprefix = "ด.ช."
-                        elif (api_res_prefix == "เด็กหญิง"):
-                            newprefix = "ด.ญ."
-                        elif (api_res_prefix == "นางสาว"):
-                            newprefix = "น.ส."
-                        else:
-                            newprefix = api_res_prefix
-                        
-                        await message.author.edit(roles=[role, role2, role3])
-                        await message.author.edit(nick=newprefix + api_res_firstname + " " + api_res_lastname)
-                        await message.channel.send("Status: :white_check_mark:")
-                        # await message.author.change_nickname(api_res_prefix + " " + api_res_firstname + " " + api_res_lastname)
-
-                        print("new verify member: " + std_id)
-                        await client.get_channel(701042885931565156).send("new verify member: `" + std_id + "`")
-                    else:
-                        await message.channel.send("Status: :x:")
-                    print("RES " + str(Con["std"][std_id][0]))
-                    await client.get_channel(701042885931565156).send("RES `" + str(Con["std"][std_id][0]) + "`")
+            if std_id not in Con["std"]:
+                await message.channel.send('ไม่พบรหัสนักเรียน `' + std_id + "`")
+                print("RES not_found")
+                await client.get_channel(701042885931565156).send("RES `not_found`")
 
             else:
-                await message.channel.send("USER: `" + user_id + " (" + message.author.display_name + ")`\nชื่อ: `" + std_firstname + "`\nนามสกุล: `" + std_lastname + "`\nระดับชั้น: `ศิษย์เก่า`")
-                await message.channel.send("Status: :white_check_mark:")
-                role = discord.utils.get(
-                    message.author.guild.roles, name="ศิษย์เก่า")
-                role2 = discord.utils.get(
-                    message.author.guild.roles, name="Student")
-                await message.author.edit(roles=[role, role2])
+                api_res_id = Con["std"][std_id][0]["id"]
+                api_res_prefix = Con["std"][std_id][0]["prefix"]
+                api_res_firstname = Con["std"][std_id][0]["firstname"]
+                api_res_lastname = Con["std"][std_id][0]["lastname"]
+                api_res_lastname_forValidate = Con["std"][std_id][0]["lastname"].split()[0]
+                api_res_grade = Con["std"][std_id][0]["grade"]
+                api_res_class = Con["std"][std_id][0]["class"]
+
+                await message.channel.send("USER: `" + user_id + " (" + message.author.display_name + ")`\nชื่อ: `" + api_res_firstname + "`\nนามสกุล: `" + api_res_lastname + "`\nระดับชั้น: `" + api_res_grade + "/" + api_res_class + "`")
+
+                # Data Match
+                if (api_res_firstname == std_firstname and api_res_lastname_forValidate == std_lastname):
+                    role = discord.utils.get(
+                        message.author.guild.roles, name=api_res_grade + "/" + api_res_class)
+                    role2 = discord.utils.get(
+                        message.author.guild.roles, name="M:" + api_res_grade)
+                    role3 = discord.utils.get(
+                        message.author.guild.roles, name="Student")
+                    # await message.author.add_roles(abc.+)
+
+                    cnx = mysql.connector.connect(user='pondjaco', password='11032545', host='p0nd.ga', database='pondjaco_smdkku')
+                    cursor = cnx.cursor()
+
+                    query_func = ("UPDATE `std_2563_discordDB` SET `discord_user_id` = %s WHERE `id` = %s")
+                    data_query = (message.author.id, text[0])
+
+                    # Insert new employee
+                    cursor.execute(query_func, data_query)
+                
+                    # Make sure data is committed to the database
+                    cnx.commit()
+
+                    cursor.close()
+                    cnx.close()
+
+                    newprefix = ""
+                    if (api_res_prefix == "เด็กชาย"):
+                        newprefix = "ด.ช."
+                    elif (api_res_prefix == "เด็กหญิง"):
+                        newprefix = "ด.ญ."
+                    elif (api_res_prefix == "นางสาว"):
+                        newprefix = "น.ส."
+                    else:
+                        newprefix = api_res_prefix
+                    
+                    await message.author.edit(roles=[role, role2, role3])
+                    await message.author.edit(nick=newprefix + api_res_firstname + " " + api_res_lastname)
+                    await message.channel.send("Status: :white_check_mark:")
+                    # await message.author.change_nickname(api_res_prefix + " " + api_res_firstname + " " + api_res_lastname)
+
+                    print("new verify member: " + std_id)
+                    await client.get_channel(701042885931565156).send("new verify member: `" + std_id + "`")
+                else:
+                    await message.channel.send("Status: :x:")
+                print("RES " + str(Con["std"][std_id][0]))
+                await client.get_channel(701042885931565156).send("RES `" + str(Con["std"][std_id][0]) + "`")
 
         if message.content.lower().startswith('/announce'):
             Mes_Str = message.content[len('/announce')+1:]

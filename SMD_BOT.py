@@ -466,7 +466,14 @@ class MyClient(discord.Client):
 
         for Mem in message.mentions:
             if self.user.name == Mem.display_name:
-                await message.channel.send(randomText_Mention().format(message))
+                if "ตารางสอบ" in message.content:
+                    await message.channel.send("ตารางสอบกลางภาคของภาคเรียนที่ 1 ปีการศึกษา 2563".format(message))
+                    await message.channel.send("https://cdn.discordapp.com/attachments/721067117239074938/741229716073218138/117382264_2989615384501527_6841120833030236724_o.png".format(message))
+                    await message.channel.send("https://cdn.discordapp.com/attachments/721067117239074938/741229785338085406/117107849_2989615407834858_3829411359297021576_o.png".format(message))
+                elif "โดเนท" in message.content:
+                    await message.channel.send("
+                else:
+                    await message.channel.send(randomText_Mention().format(message))
                 break
 
     async def on_guild_join(guild):

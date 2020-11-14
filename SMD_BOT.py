@@ -471,7 +471,9 @@ class MyClient(discord.Client):
                     await message.channel.send("https://cdn.discordapp.com/attachments/721067117239074938/741229716073218138/117382264_2989615384501527_6841120833030236724_o.png".format(message))
                     await message.channel.send("https://cdn.discordapp.com/attachments/721067117239074938/741229785338085406/117107849_2989615407834858_3829411359297021576_o.png".format(message))
                 elif "โดเนท" in message.content:
-                    await message.channel.send("
+                    await message.channel.send("สามารถโดเนทได้ที่".format(message))
+                    await message.channel.send("- Promptpay: `0908508007`".format(message))
+                    await message.channel.send("- True Wallet: `0908508007`".format(message))
                 else:
                     await message.channel.send(randomText_Mention().format(message))
                 break

@@ -467,13 +467,13 @@ class MyClient(discord.Client):
         for Mem in message.mentions:
             if self.user.name == Mem.display_name:
                 if "ตารางสอบ" in message.content:
-                    await message.channel.send("ตารางสอบกลางภาคของภาคเรียนที่ 1 ปีการศึกษา 2563".format(message))
-                    await message.channel.send("https://cdn.discordapp.com/attachments/721067117239074938/741229716073218138/117382264_2989615384501527_6841120833030236724_o.png".format(message))
-                    await message.channel.send("https://cdn.discordapp.com/attachments/721067117239074938/741229785338085406/117107849_2989615407834858_3829411359297021576_o.png".format(message))
+                    await message.channel.send("ช่วงนี้ยังไม่ใกล้เวลาสอบแต่ก็อย่าลืมอ่านหนังสือกันนะงับบ".format(message))
                 elif "โดเนท" in message.content:
                     await message.channel.send("สามารถโดเนทได้ที่".format(message))
                     await message.channel.send("- Promptpay: `0908508007`".format(message))
                     await message.channel.send("- True Wallet: `0908508007`".format(message))
+                elif "ตารางเรียน" in message.content:
+                    await message.channel.send("ตารางเรียนภาคเรียนที่ 2 ปีการศึกษา 2563: https://www.facebook.com/SMD.KKU/posts/3258863167576746".format(message))
                 else:
                     await message.channel.send(randomText_Mention().format(message))
                 break

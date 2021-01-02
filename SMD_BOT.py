@@ -18,6 +18,12 @@ if insert_token == "":
 
 Guess_Num = {}
 
+
+async def setBotName(Client, name):
+    for GG in Client.guilds:
+        await GG.me.edit(nick = name)
+
+
 def Getname(Client,Id,Guild = None):
 	if Guild== None:
 		return Client.get_user(int(Id)).name
@@ -62,6 +68,7 @@ class MyClient(discord.Client):
     async def on_ready(self):
         print('\nLogged in as ' + self.user.name +
               " (" + str(self.user.id) + ")\n------")
+        await setBotName(self,'SMD')
         await client.change_presence(activity=discord.Game(name='รอเด็กมาโรงเรียน'))
 
     async def on_message(self, message):
@@ -467,7 +474,9 @@ class MyClient(discord.Client):
         for Mem in message.mentions:
             if self.user.name == Mem.display_name:
                 if "ตารางสอบ" in message.content:
-                    await message.channel.send("ช่วงนี้ยังไม่ใกล้เวลาสอบแต่ก็อย่าลืมอ่านหนังสือกันนะงับบ".format(message))
+                    await message.channel.send("ตารางสอบ กลางภาคเรียนที่ 2 ปีการศึกษา 2563".format(message))
+                    await message.channel.send("https://cdn.discordapp.com/attachments/601788363313512480/792976531571736606/133046506_3399645660165162_3244795859169062503_o.png".format(message))
+                    await message.channel.send("https://cdn.discordapp.com/attachments/601788363313512480/792976514529886228/133669598_3399645626831832_7078914509588730060_o.png".format(message))
                 elif "โดเนท" in message.content:
                     await message.channel.send("สามารถโดเนทได้ที่".format(message))
                     await message.channel.send("- Promptpay: `0908508007`".format(message))
@@ -497,7 +506,6 @@ class MyClient(discord.Client):
     async def announcements(Con):
         channel = client.get_channel(700718680333615154)
         await channel.send(Con)
-
 
 client = MyClient()
 client.run(insert_token)

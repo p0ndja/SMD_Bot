@@ -90,9 +90,9 @@ class MyClient(discord.Client):
             std_firstname = text[1]
             std_lastname = text[2]
 
-            response = requests.get("https://smd.p0nd.ga/api/student")
-            print("GET `https://smd.p0nd.ga/api/student`")
-            await client.get_channel(701042885931565156).send("GET `https://smd.p0nd.ga/api/student`")
+            response = requests.get("https://smd.pondja.com/api/student")
+            print("GET `https://smd.pondja.com/api/student`")
+            await client.get_channel(701042885931565156).send("GET `https://smd.pondja.com/api/student`")
 
             if response.status_code != 200:
                 message.channel.send(
@@ -131,9 +131,9 @@ class MyClient(discord.Client):
             text = message.content[len('/checkid'):].split()
             std_id = text[0]
 
-            response = requests.get("https://smd.p0nd.ga/api/student")
-            print("GET `https://smd.p0nd.ga/api/student`")
-            await client.get_channel(701042885931565156).send("GET `https://smd.p0nd.ga/api/student`")
+            response = requests.get("https://smd.pondja.com/api/student")
+            print("GET `https://smd.pondja.com/api/student`")
+            await client.get_channel(701042885931565156).send("GET `https://smd.pondja.com/api/student`")
 
             if response.status_code != 200:
                 message.channel.send(
@@ -209,9 +209,9 @@ class MyClient(discord.Client):
             
             std_id = text[1]
 
-            response = requests.get("https://smd.p0nd.ga/api/student")
-            print("GET `https://smd.p0nd.ga/api/student`")
-            await client.get_channel(701042885931565156).send("GET `https://smd.p0nd.ga/api/student`")
+            response = requests.get("https://smd.pondja.com/api/student")
+            print("GET `https://smd.pondja.com/api/student`")
+            await client.get_channel(701042885931565156).send("GET `https://smd.pondja.com/api/student`")
             if response.status_code != 200:
                 message.channel.send(
                     'ตอนนี้ระบบกำลังมีปัญหา ลองใหม่ในภายหลังนะครับ')
@@ -245,7 +245,7 @@ class MyClient(discord.Client):
                         Mem.guild.roles, name="Student")
                     # await Mem.add_roles(abc.+)
 
-                    cnx = mysql.connector.connect(user='pondjaco', password='11032545', host='p0nd.ga', database='pondjaco_smdkku')
+                    cnx = mysql.connector.connect(user='pondjaco', password='11032545', host='pondhub.ga', database='pondjaco_smdkku')
                     cursor = cnx.cursor()
 
                     query_func = ("UPDATE `std_2563_discordDB` SET `discord_user_id` = %s WHERE `id` = %s")
@@ -291,9 +291,9 @@ class MyClient(discord.Client):
             std_firstname = text[1]
             std_lastname = text[2]
 
-            response = requests.get("https://smd.p0nd.ga/api/student")
-            print("GET `https://smd.p0nd.ga/api/student`")
-            await client.get_channel(701042885931565156).send("GET `https://smd.p0nd.ga/api/student`")
+            response = requests.get("https://smd.pondja.com/api/student")
+            print("GET `https://smd.pondja.com/api/student`")
+            await client.get_channel(701042885931565156).send("GET `https://smd.pondja.com/api/student`")
             if response.status_code != 200:
                 message.channel.send(
                     'ตอนนี้ระบบกำลังมีปัญหา ลองใหม่ในภายหลังนะครับ')
@@ -328,7 +328,7 @@ class MyClient(discord.Client):
                         message.author.guild.roles, name="Student")
                     # await message.author.add_roles(abc.+)
 
-                    cnx = mysql.connector.connect(user='pondjaco', password='11032545', host='p0nd.ga', database='pondjaco_smdkku')
+                    cnx = mysql.connector.connect(user='pondjaco', password='11032545', host='pondhub.ga', database='pondjaco_smdkku')
                     cursor = cnx.cursor()
 
                     query_func = ("UPDATE `std_2563_discordDB` SET `discord_user_id` = %s WHERE `id` = %s")

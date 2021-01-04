@@ -12,7 +12,7 @@ from itertools import cycle
 from random import randint
 from urllib.request import Request, urlopen
 
-insert_token = input("Please insert 1 token: ")
+insert_token = input("INSERT ME A TOKEN: ")
 if insert_token == "":
     exit(1)
 

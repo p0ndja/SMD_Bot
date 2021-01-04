@@ -368,6 +368,11 @@ class MyClient(discord.Client):
             await message.delete()
             await channel.send("@everyone\n"+Mes_Str)
 
+        if message.content.lower().startswith('/sayhere'):
+            Mes_Str = message.content[len('/sayhere')+1:]
+            await message.delete()
+            await message.channel.send(Mes_Str)
+
         if message.content.lower().startswith('/update'):
             Mes_Str = message.content[len('/update')+1:]
             channel = client.get_channel(700875375651192832)

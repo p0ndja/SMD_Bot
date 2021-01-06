@@ -90,9 +90,9 @@ class MyClient(discord.Client):
             std_firstname = text[1]
             std_lastname = text[2]
 
-            response = requests.get("https://smd.pondja.com/api/student")
-            print("GET `https://smd.pondja.com/api/student`")
-            await client.get_channel(701042885931565156).send("GET `https://smd.pondja.com/api/student`")
+            response = requests.get(f"https://smd.pondja.com/api/student?id={text[0]}")
+            print(f"GET `https://smd.pondja.com/api/student?id={text[0]}`")
+            await client.get_channel(701042885931565156).send(f"GET `https://smd.pondja.com/api/student?id={text[0]}`")
 
             if response.status_code != 200:
                 message.channel.send(
@@ -131,9 +131,9 @@ class MyClient(discord.Client):
             text = message.content[len('/checkid'):].split()
             std_id = text[0]
 
-            response = requests.get("https://smd.pondja.com/api/student")
-            print("GET `https://smd.pondja.com/api/student`")
-            await client.get_channel(701042885931565156).send("GET `https://smd.pondja.com/api/student`")
+            response = requests.get(f"https://smd.pondja.com/api/student?id={text[0]}")
+            print(f"GET `https://smd.pondja.com/api/student?id={text[0]}`")
+            await client.get_channel(701042885931565156).send(f"GET `https://smd.pondja.com/api/student?id={text[0]}`")
 
             if response.status_code != 200:
                 message.channel.send(
@@ -209,9 +209,9 @@ class MyClient(discord.Client):
             
             std_id = text[1]
 
-            response = requests.get("https://smd.pondja.com/api/student")
-            print("GET `https://smd.pondja.com/api/student`")
-            await client.get_channel(701042885931565156).send("GET `https://smd.pondja.com/api/student`")
+            response = requests.get(f"https://smd.pondja.com/api/student?id={text[0]}")
+            print(f"GET `https://smd.pondja.com/api/student?id={text[0]}`")
+            await client.get_channel(701042885931565156).send(f"GET `https://smd.pondja.com/api/student?id={text[0]}`")
             if response.status_code != 200:
                 message.channel.send(
                     'ตอนนี้ระบบกำลังมีปัญหา ลองใหม่ในภายหลังนะครับ')
@@ -291,9 +291,9 @@ class MyClient(discord.Client):
             std_firstname = text[1]
             std_lastname = text[2]
 
-            response = requests.get("https://smd.pondja.com/api/student")
-            print("GET `https://smd.pondja.com/api/student`")
-            await client.get_channel(701042885931565156).send("GET `https://smd.pondja.com/api/student`")
+            response = requests.get("https://smd.pondja.com/api/student?id=" + text[0])
+            print(f"GET `https://smd.pondja.com/api/student?id={text[0]}`")
+            await client.get_channel(701042885931565156).send(f"GET `https://smd.pondja.com/api/student?id={text[0]}`")
             if response.status_code != 200:
                 message.channel.send(
                     'ตอนนี้ระบบกำลังมีปัญหา ลองใหม่ในภายหลังนะครับ')

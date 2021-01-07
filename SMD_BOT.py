@@ -95,7 +95,7 @@ class MyClient(discord.Client):
             await client.get_channel(701042885931565156).send(f"GET `https://smd.pondja.com/api/student?id={text[0]}`")
 
             if response.status_code != 200:
-                message.channel.send(
+                await message.channel.send(
                     'ตอนนี้ระบบกำลังมีปัญหา ลองใหม่ในภายหลังนะครับ')
 
             checkId = int(std_id)
@@ -136,7 +136,7 @@ class MyClient(discord.Client):
             await client.get_channel(701042885931565156).send(f"GET `https://smd.pondja.com/api/student?id={text[0]}`")
 
             if response.status_code != 200:
-                message.channel.send(
+                await message.channel.send(
                     'ตอนนี้ระบบกำลังมีปัญหา ลองใหม่ในภายหลังนะครับ')
             
             checkId = int(std_id)
@@ -213,7 +213,7 @@ class MyClient(discord.Client):
             print(f"GET `https://smd.pondja.com/api/student?id={text[0]}`")
             await client.get_channel(701042885931565156).send(f"GET `https://smd.pondja.com/api/student?id={text[0]}`")
             if response.status_code != 200:
-                message.channel.send(
+                await message.channel.send(
                     'ตอนนี้ระบบกำลังมีปัญหา ลองใหม่ในภายหลังนะครับ')
 
             checkId = int(std_id)
@@ -286,7 +286,7 @@ class MyClient(discord.Client):
         if message.content.lower().startswith('/verify'):
             mess_input = message
             user_id = str(message.author.id)
-            text = message.content[len('/verify'):].split()
+            text = message.content[len('/verify')+1:].split()
             std_id = text[0]
             std_firstname = text[1]
             std_lastname = text[2]
@@ -295,7 +295,7 @@ class MyClient(discord.Client):
             print(f"GET `https://smd.pondja.com/api/student?id={text[0]}`")
             await client.get_channel(701042885931565156).send(f"GET `https://smd.pondja.com/api/student?id={text[0]}`")
             if response.status_code != 200:
-                message.channel.send(
+                await message.channel.send(
                     'ตอนนี้ระบบกำลังมีปัญหา ลองใหม่ในภายหลังนะครับ')
 
             checkId = int(std_id)
@@ -361,6 +361,28 @@ class MyClient(discord.Client):
                     await message.channel.send("โปรดมั่นใจว่าคุณพิมพ์ในรูปแบบ\n`/verify รหัสนักเรียน ชื่อ สกุล`")
                 print("RES " + str(Con["std"][std_id][0]))
                 await client.get_channel(701042885931565156).send("RES `" + str(Con["std"][std_id][0]) + "`")
+
+        if message.content.lower().startswith('/search'):
+            Mes_Str = message.content[len('/search')+1:]
+            response = requests.get(f"https://smd.pondja.com/api/student?search={Mes_Str}")
+            print(f"GET `https://smd.pondja.com/api/student?search={Mes_Str}`")
+            await client.get_channel(701042885931565156).send(f"GET `https://smd.pondja.com/api/student?search={Mes_Str}`")
+            if response.status_code != 200:
+                await message.channel.send(
+                    'ตอนนี้ระบบกำลังมีปัญหา ลองใหม่ในภายหลังนะครับ')
+            Con = response.json()
+            await message.channel.send(f"ข้อมูลทั้งหมดที่เกี่ยวข้องกับ {Mes_Str}")
+            if not len(Con["std"]):
+                message.channel.send("ไม่พบข้อมูล")
+            else:
+                i = 0
+                for s in Con["std"]:
+                    std_id = Con["std"][s][0]["id"]
+                    std_name = Con["std"][s][0]["firstname"] + " " + Con["std"][s][0]["lastname"]
+                    std_class = Con["std"][s][0]["grade"] + "/" + Con["std"][s][0]["class"]
+                    i += 1
+                    await message.channel.send(f"(**{i}**)\n> รหัสนักเรียน: {std_id}\n> ชื่อ: {std_name}\n> ระดับชั้น: {std_class}")
+            await message.channel.send("ไม่พบผลลัพธ์ที่ต้องการหรอ ลองเปลี่ยนคำค้นหาดูสิ")        
 
         if message.content.lower().startswith('/announce'):
             Mes_Str = message.content[len('/announce')+1:]

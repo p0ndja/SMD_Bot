@@ -539,6 +539,8 @@ class MyClient(discord.Client):
                     await message.channel.send("- True Wallet: `0908508007`".format(message))
                 elif "ตารางเรียน" in message.content:
                     await message.channel.send("ตารางเรียนภาคเรียนที่ 2 ปีการศึกษา 2563: https://www.facebook.com/SMD.KKU/posts/3258863167576746".format(message))
+                elif "หวย" in message.content:
+                    await message.channel.send(f"อืมมมม..... เอาเป็นเลข {randint(0, 100):02d} ละกัน")
                 else:
                     await message.channel.send(randomText_Mention().format(message))
                 break

@@ -3,7 +3,7 @@ import requests
 import json
 from json import JSONEncoder
 import time
-import os.path
+import os
 import asyncio
 import mysql.connector
 from mysql.connector import connection
@@ -33,6 +33,15 @@ def Getname(Client,Id,Guild = None):
 			return Client.get_user(int(Id)).name+"(AKA. "+Mininame+")"
 		return Client.get_user(int(Id)).name
 
+def download_url(url, directory):
+    response = requests.get(url, stream=True)
+    if response.status_code != 200:
+        raise ValueError('Failed to download')
+
+    filename = url.replace("https://cdn.discordapp.com/attachments/","").split("/")
+    open(os.path.join(directory, filename[0] + filename[1] + filename[2]), 'wb').write(response.content)
+
+    return os.path.join(directory,filename[0] + filename[1] + filename[2])
 
 def randomText_Mention():
     Words = [":v:","🤔","뭐해?","😂","💩","👍","👀",":P","👍","ว่าไง?","อะไร?","ไม่สน","อย่ามายุ่ง","ลาก่อน","Leave me alone!!!!","สวย","เริ่ดมาก","เชิญห้องปกครอง","อ๊อยหย๋อ","ลาออก!","ไม่อ่าน ไม่ตอบ ไม่สน...",";w;","=A=!","- -*","แล้วไง?"
@@ -72,6 +81,7 @@ class MyClient(discord.Client):
         await client.change_presence(activity=discord.Game(name='รอเด็กมาโรงเรียน'))
 
     async def on_message(self, message):
+        #print(f"\n\n\n===[{message.author.id}@{message.channel}->{message.content}*{message.attachments}]===\n{message}")
         if message.content.lower().startswith('/hello'):
             await message.channel.send(randomText_Hello().format(message))
         if message.content.lower().startswith('/help') or message.content.lower().startswith('!help'):
@@ -387,32 +397,44 @@ class MyClient(discord.Client):
         if message.content.lower().startswith('/announce'):
             Mes_Str = message.content[len('/announce')+1:]
             channel = client.get_channel(700718680333615154)
+            if len(Mes_Str):
+                await channel.send(("@everyone\n" + Mes_Str).format(message))
+            if len(message.attachments):
+                if not os.path.exists("__CACHE__"):
+                    os.mkdir("__CACHE__")
+                for attach in message.attachments:
+                    url = attach.url
+                    resFile = download_url(url, "__CACHE__")
+                    print(resFile)
+                    await channel.send(file=discord.File(resFile))
+                    os.remove(resFile)
             await message.delete()
-            await channel.send("@everyone\n"+Mes_Str)
 
-        if message.content.lower().startswith('/sayhere'):
-            Mes_Str = message.content[len('/sayhere')+1:]
+        if message.content.lower().startswith('/say'):
+            Mes_Str = message.content[len('/say')+1:].split(" ")
+
+            client_channel_id = message.channel.id
+            start_search_message = 0
+            if "<#" in Mes_Str[0] and ">" in Mes_Str[0]:
+                client_channel_id = int(Mes_Str[0].replace("<#","").replace(">",""))
+                start_search_message = 1
+            
+            client_send_message = Mes_Str[start_search_message::]
+            client_message = ""
+            for c in client_send_message:
+                client_message += c
+            channel = client.get_channel(client_channel_id)
+            if len(client_message):
+                await channel.send((client_message).format(message))
+            if len(message.attachments):
+                if not os.path.exists("__CACHE__"):
+                    os.mkdir("__CACHE__")
+                for attach in message.attachments:
+                    url = attach.url
+                    resFile = download_url(url, "__CACHE__")
+                    await channel.send(file=discord.File(resFile))
+                    os.remove(resFile)
             await message.delete()
-            await message.channel.send(Mes_Str)
-
-        if message.content.lower().startswith('/update'):
-            Mes_Str = message.content[len('/update')+1:]
-            channel = client.get_channel(700875375651192832)
-            await message.delete()
-            await channel.send("@everyone\n"+Mes_Str)
-
-        if message.content.lower().startswith('say('):
-            Str_Content = message.content
-            await message.delete()
-            # Say(4412) ไอ้นี้มันอู้งานครับบ
-            Id_channel = Str_Content.find("(")
-
-            for i in range(1, 40):
-                if Str_Content[Id_channel+i] == ")":
-                    channel = client.get_channel(
-                        int(Str_Content[Id_channel+1:Id_channel+i]))
-                    await channel.send(Str_Content[Id_channel+i+2:])
-                    break
 
         if message.content.lower().startswith('/guest'):
             namae = str(message.author.id)

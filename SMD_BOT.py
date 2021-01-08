@@ -33,15 +33,17 @@ def Getname(Client,Id,Guild = None):
 			return Client.get_user(int(Id)).name+"(AKA. "+Mininame+")"
 		return Client.get_user(int(Id)).name
 
-def download_url(url, directory):
+def download_url(url, directory = "__CACHE__"):
+    if not os.path.exists(directory):
+        os.mkdir(directory)
     response = requests.get(url, stream=True)
     if response.status_code != 200:
         raise ValueError('Failed to download')
 
     filename = url.replace("https://cdn.discordapp.com/attachments/","").split("/")
-    open(os.path.join(directory, filename[0] + filename[1] + filename[2]), 'wb').write(response.content)
+    open(os.path.join(directory, filename[2]), 'wb').write(response.content)
 
-    return os.path.join(directory,filename[0] + filename[1] + filename[2])
+    return os.path.join(directory,filename[2])
 
 def randomText_Mention():
     Words = [":v:","🤔","뭐해?","😂","💩","👍","👀",":P","👍","ว่าไง?","อะไร?","ไม่สน","อย่ามายุ่ง","ลาก่อน","Leave me alone!!!!","สวย","เริ่ดมาก","เชิญห้องปกครอง","อ๊อยหย๋อ","ลาออก!","ไม่อ่าน ไม่ตอบ ไม่สน...",";w;","=A=!","- -*","แล้วไง?"
@@ -400,12 +402,9 @@ class MyClient(discord.Client):
             if len(Mes_Str):
                 await channel.send(("@everyone\n" + Mes_Str).format(message))
             if len(message.attachments):
-                if not os.path.exists("__CACHE__"):
-                    os.mkdir("__CACHE__")
                 for attach in message.attachments:
                     url = attach.url
-                    resFile = download_url(url, "__CACHE__")
-                    print(resFile)
+                    resFile = download_url(url)
                     await channel.send(file=discord.File(resFile))
                     os.remove(resFile)
             await message.delete()
@@ -422,16 +421,15 @@ class MyClient(discord.Client):
             client_send_message = Mes_Str[start_search_message::]
             client_message = ""
             for c in client_send_message:
-                client_message += c
+                client_message += c + " "
             channel = client.get_channel(client_channel_id)
-            if len(client_message):
+            empty_message = client_message.replace(" ","")
+            if empty_message:
                 await channel.send((client_message).format(message))
             if len(message.attachments):
-                if not os.path.exists("__CACHE__"):
-                    os.mkdir("__CACHE__")
                 for attach in message.attachments:
                     url = attach.url
-                    resFile = download_url(url, "__CACHE__")
+                    resFile = download_url(url)
                     await channel.send(file=discord.File(resFile))
                     os.remove(resFile)
             await message.delete()

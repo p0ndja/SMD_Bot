@@ -89,7 +89,7 @@ class MyClient(discord.Client):
     async def on_message(self, message):
 
         #print(f"\n\n\n===[{message.author.id}@{message.channel}->{message.content}*{message.attachments}]===\n{message}")
-        rudeWord = ["ทรงพระเจริญ","ด้วยเกล้า","ควรมิควรแล้วแต่จะ"]
+        rudeWord = ["ทรงพระเจริญ","ด้วยเกล้า","ควรมิควรแล้วแต่จะ","เสี่ยโอ"]
         if any(word in message.content for word in rudeWord):
             await message.channel.send(randomText_rude().format(message))
 
@@ -102,41 +102,6 @@ class MyClient(discord.Client):
             em.add_field(name="/hello", value="คำสั่งคนเหงา")
             em.add_field(name="/verify", value="สำหรับยืนยันตัวตน")
             await message.channel.send(content=None, embed=em)
-
-        if message.content.lower().startswith('/checkid'):
-            mess_input = message
-            user_id = str(message.author.id)
-            text = message.content[len('/checkid'):].split()
-            std_id = text[0]
-
-            response = requests.get(f"https://smd.pondja.com/api/student?id={text[1]}")
-            print(f"GET `https://smd.pondja.com/api/student?id={text[1]}`")
-            await client.get_channel(701042885931565156).send(f"GET `https://smd.pondja.com/api/student?id={text[1]}`")
-
-            if response.status_code != 200:
-                await message.channel.send(
-                    'ตอนนี้ระบบกำลังมีปัญหา ลองใหม่ในภายหลังนะครับ')
-            
-            checkId = int(std_id)
-            Con = response.json()
-
-            if std_id not in Con["std"]:
-                await message.channel.send('ไม่พบรหัสนักเรียน `' + std_id + "`")
-                print("RES not_found")
-                await client.get_channel(701042885931565156).send("RES `not_found`")
-
-            else:
-                api_res_id = Con["std"][std_id][0]["id"]
-                api_res_prefix = Con["std"][std_id][0]["prefix"]
-                api_res_firstname = Con["std"][std_id][0]["firstname"]
-                api_res_lastname = Con["std"][std_id][0]["lastname"]
-                api_res_lastname_forValidate = Con["std"][std_id][0]["lastname"].split()[0]
-                api_res_grade = Con["std"][std_id][0]["grade"]
-                api_res_class = Con["std"][std_id][0]["class"]
-
-                await message.channel.send("Response: \nชื่อ: `" + api_res_firstname + "`\nนามสกุล: `" + api_res_lastname + "`\nระดับชั้น: `" + api_res_grade + "/" + api_res_class + "`")
-                print("RES " + str(Con["std"][std_id][0]))
-                await client.get_channel(701042885931565156).send("RES `" + str(Con["std"][std_id][0]) + "`")
 
         if message.content.lower().startswith('/stats'):
             await message.delete()
@@ -269,9 +234,9 @@ class MyClient(discord.Client):
             std_firstname = text[1]
             std_lastname = text[2]
 
-            response = requests.get("https://smd.pondja.com/api/student?id=" + text[1])
-            print(f"GET `https://smd.pondja.com/api/student?id={text[1]}`")
-            await client.get_channel(701042885931565156).send(f"GET `https://smd.pondja.com/api/student?id={text[1]}`")
+            response = requests.get("https://smd.pondja.com/api/student?id=" + text[0])
+            print(f"GET `https://smd.pondja.com/api/student?id={text[0]}`")
+            await client.get_channel(701042885931565156).send(f"GET `https://smd.pondja.com/api/student?id={text[0]}`")
             if response.status_code != 200:
                 await message.channel.send(
                     'ตอนนี้ระบบกำลังมีปัญหา ลองใหม่ในภายหลังนะครับ')

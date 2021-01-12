@@ -89,7 +89,7 @@ class MyClient(discord.Client):
     async def on_message(self, message):
 
         #print(f"\n\n\n===[{message.author.id}@{message.channel}->{message.content}*{message.attachments}]===\n{message}")
-        rudeWord = ["ทรงพระเจริญ","ด้วยเกล้า","ควรมิควรแล้วแต่จะ","เสี่ยโอ"]
+        rudeWord = ["ทรงพระเจริญ","ด้วยเกล้า","ควรมิควรแล้วแต่จะ","เสี่ยโอ", "ข้ารองพระบาท", "เรารักในหลวง"]
         if any(word in message.content for word in rudeWord):
             await message.channel.send(randomText_rude().format(message))
 

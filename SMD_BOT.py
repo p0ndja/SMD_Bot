@@ -1,50 +1,57 @@
-﻿import discord
-import requests
-import json
-from json import JSONEncoder
-import time
-import os
-import asyncio
-import mysql.connector
-from mysql.connector import connection
-from mysql.connector import errorcode
-from itertools import cycle
-from random import randint
-from urllib.request import Request, urlopen
+﻿try:
+    import discord
+    import requests
+    import json
+    from json import JSONEncoder
+    import time
+    import os
+    from os import path
+    import asyncio
+    import mysql.connector
+    from mysql.connector import connection
+    from mysql.connector import errorcode
+    from itertools import cycle
+    from random import randint
+    from urllib.request import Request, urlopen
+except Exception as e:
+    print("[!] ERROR on importing module:\n",e)
+    exit(0)
+
+
+#========================= INITIAL STEP =========================
+
+# Check if settings is exist.
+if not path.isfile("settings.json"):
+    json = """{
+    "database": {
+        "host":     "<<IP>>",
+        "username": "<<USERNAME>>",
+        "password": "<<PASSWORD>>",
+        "database": "<<DATABASE>>"
+    }
+}"""
+    
+    f = open("settings.json","w")
+    f.write(str(json))
+    print("/!\ Please config your connection settings first. /!\\")
+    exit(0)
+
+#Loading settings.json
+f = json.loads(open("settings.json", "r").read())
+try:
+    dbconnector = mysql.connector.connect(host=f['database']['host'],user=f['database']['username'],password=f['database']['password'],database=f['database']['database'])
+except Exception as e:
+    print("[!] ERROR on establishing database:\n", e)
+    exit(0)
+
 
 insert_token = input("INSERT ME A TOKEN: ")
 if insert_token == "":
     exit(1)
 
-Guess_Num = {}
+#========================= INITIAL STEP =========================
 
-
-async def setBotName(Client, name):
-    for GG in Client.guilds:
-        await GG.me.edit(nick = name)
-
-
-def Getname(Client,Id,Guild = None):
-	if Guild== None:
-		return Client.get_user(int(Id)).name
-	else:
-		Mininame = Guild.get_member(int(Id)).nick
-		if Mininame != None:
-			return Client.get_user(int(Id)).name+"(AKA. "+Mininame+")"
-		return Client.get_user(int(Id)).name
-
-def download_url(url, directory = "__CACHE__"):
-    if not os.path.exists(directory):
-        os.mkdir(directory)
-    response = requests.get(url, stream=True)
-    if response.status_code != 200:
-        raise ValueError('Failed to download')
-
-    filename = url.replace("https://cdn.discordapp.com/attachments/","").split("/")
-    open(os.path.join(directory, filename[2]), 'wb').write(response.content)
-
-    return os.path.join(directory,filename[2])
-
+#========================= DEFINE FUNCTION =========================
 def randomText_Mention(target = "{0.author.mention}"):
     Words = [":v:","🤔","뭐해?","😂","💩","👍","👀",":P","👍","ว่าไง?","อะไร?","ไม่สน","อย่ามายุ่ง","ลาก่อน","Leave me alone!!!!","สวย","เริ่ดมาก","เชิญห้องปกครอง","อ๊อยหย๋อ","ลาออก!","ไม่อ่าน ไม่ตอบ ไม่สน...",";w;","=A=!","- -*","แล้วไง?"
             ,"https://giphy.com/gifs/sad-cry-capoo-3og0IG0skAiznZQLde","https://giphy.com/stickers/cat-pearl-capoo-TFUhSMPFJG7fPAiLpQ","https://giphy.com/gifs/happy-rainbow-capoo-XEgmzMLDhFQAga8umN","https://giphy.com/gifs/cat-color-capoo-dYZxsY7JIMSy2Afy6e","ระเบิดเวลา......**อ๊าาาาาาาาาาาาาาาาาาาาาาาาาาาาาาาาาาาา**"
@@ -63,11 +70,7 @@ def randomText_Mention(target = "{0.author.mention}"):
             ,"เป็นปลื้มมมมมมมมมม","ว้าว","ว้าวววว","おまえ わ もう しんでいる","😒","😜","🙄","死ぬ","オラオラオラオラオラオラオラオラオラオラオラオラオラオラオラオラオラオラオラオラオラ","オラオラオラオラオラオラ","รู้นะว่าเหงา","รู้นะว่าเหงาแหละ ดูออก","เหงาแหละดูออก","คนไม่ดี","คนเฬว","คนดจีย์","ดจีย์~","คนดี","โรงเรียนเดียวกับเราเลย แต่ทำไมเราไม่เคยเห็นเธอเลยล่ะ","แกมาทำอะไรเอาตอนนี้","ไม่รักไม่ต้องมาแคร์ไม่ต้องมาดีกับฉัน","แกแหละ","เราแหละ","เขาแหละ","พวกเราแหละ","เธอแหละ","นายแหละ",""
             ,"*ฉันก็แค่อยากวิ่ง ... แต่ไม่อยากเหนื่อย* -- **สิริกร แก้วโคตร**","ถ้าเค้ารักแกจริง เค้าก็จะหาทางอยู่กับแกได้เองแหละ","No Comment","ถามว่าเรียนกี่โมง อยากจะไปส่ง ชิมิชิมิ","บอกเธอว่าไม่เป็นไร แต่ว่าในใจ ได้สิได้สิ","_#ปลาวาฬคาบแม่จิน_","SMD สาขา ปลาวาฬใจดี","SMD สาขาฮีโร่หลังมอ","ฮัลโล่วววววว มีใครอยู่บ้างงงงงงงง","อย่าทำแบบนี้สิ","เด็กไม่ดี","ไม่ว่างจริง ๆ ~", "ละแมะ" , "ละแมะ ละไม่ว่างจริง ๆ อะหรือ อะหรือ อะหรือ อะหรือว่า","ไม่ว่างจริง ๆ อะหรือ อะหรือ อะหรือว่าเล่นเกมอยู่~","ไม่ว่างจริง ๆ อะหรือ อะหรือ อะหรือว่ามีคนคุยอยู่~", "ไม่ว่างจริง ๆ อะหรือ อะหรือ อะหรือว่ามีคนอื่น"
             ,"อะหรือ อะหรือ อะหรือ อะหรือว่า","ให้เธอ~ :rose:","ให้เธอ~ :v:","ให้เธอ~ :love_you_gesture:","ดงปราคช","เคยอม","น้องรู้จัก**โรงเรียนมดแดงดำ**รึเปล่าค๊าาา","#respectdemocracyTHAI :flag_th:","__#รรมดแดงดำติดสัดแพทย์__",":hugMELON:"]
-    specialWords = ["ฮึ้ยแก เคยเข้าไปดูเว็บโรงเรียนใหม่กันรึยังอะ นี่ ๆ ๆ ๆ https://smd.pondja.com","ไม่มีตังอะ โดเนทมาหน่อย **`0908508007 (Promtpay)`**","โดเนทมาหน่อย **`0908508007 (Promtpay)`**","จะว่าไป คิดว่าเว็บโรงเรียนใหม่เป็นยังไงกันนะ https://smd.pondja.com :thinking:","เว็บโรงเรียนใหม่สวยมั้ยนะะ https://smd.pondja.com","เว็บโรงเรียนใหม่มันต้องดีแน่ ๆ https://smd.pondja.com"]
-    if (randint(0,20) == 11):
-        return specialWords[randint(0,len(specialWords)-1)] + f" {target}"
-    else:
-        return Words[randint(0, len(Words)-1)] + f" {target}"
+    return Words[randint(0, len(Words)-1)] + f" {target}"
 
 def randomText_Hello():
     Words = ["สวัสดีเจ้า","สวัสดีจ้า","สวัสดีครับ","สวัสดีค่ะ","ສະບາຍດີ","Annyeonghaseyo","Kon'nichiwa","Hello","привет!","ว่าไง",";w;?",
@@ -77,27 +80,82 @@ def randomText_Hello():
 def randomText_rude():
     Words = ["ฮั่นแน่ ตาวิเศษมองเห็นนะ! :eyes:", "อย่าพูดมันออกมาสิ", "ไม่เอาไม่พูด", "นะ...นี่มัน...**คำต้องห้าม**!", "การ์ดกับดักทำงาน", ":yellow_heart:", "ไม่รักชาติก็ออกไป...ไป!","ไม่รักชาติก็ออกไป...ไป! ไปอยู่เยอรมันเลย :flag_de:"]
     return Words[randint(0, len(Words)-1)] + " {0.author.mention}"
+    
+def download_url(url, directory = "__CACHE__"):
+    if not os.path.exists(directory):
+        os.mkdir(directory)
+    response = requests.get(url, stream=True)
+    if response.status_code != 200:
+        raise ValueError('Failed to download')
+
+    filename = url.replace("https://cdn.discordapp.com/attachments/","").split("/")
+    open(os.path.join(directory, filename[2]), 'wb').write(response.content)
+
+    return os.path.join(directory,filename[2])
+
+async def setBotName(Client, name):
+    for GG in Client.guilds: #Make bot set itself name on all server it join.
+        await GG.me.edit(nick = name)
+
+def apiLookup():
+    response = requests.get("https://api.11th.studio/p0ndja/std64?id="+str(stdID))
+    print(f"GET: https://api.11th.studio/p0ndja/std64?id={stdID}")
+    if response.status_code != 200:
+        print(f"ERROR: INTERNAL SERVER ERROR")
+        return -1,"","","",-1,-1
+
+    return 0,response.json()
+
+def apiLookup(stdID:int):
+    response = requests.get("https://api.11th.studio/p0ndja/std64?id="+str(stdID))
+    print(f"GET: https://api.11th.studio/p0ndja/std64?id={stdID}")
+    if response.status_code != 200:
+        print(f"ERROR: INTERNAL SERVER ERROR")
+        return -1,"","","",-1,-1
+
+    stdDB = response.json()
+
+    #Student ID not found
+
+    if len(stdDB) > 1:
+        return 0,response.json()
+    elif str(stdID) not in stdDB.keys():
+        print(f"RESPONSE: ID {stdID} NOT FOUND")
+        return -1,"","","",-1,-1
+    
+    #Student ID found
+    return 1, stdDB[str(stdID)]["prefix"], stdDB[str(stdID)]["firstname"], stdDB[str(stdID)]["lastname"], int(stdDB[str(stdID)]["grade"]), int(stdDB[str(stdID)]["class"])
+
+rudeWord = ["ทรงพระเจริญ","ด้วยเกล้า","ควรมิควรแล้วแต่จะ","เสี่ยโอ", "ข้ารองพระบาท", "เรารักในหลวง"]
+Guess_Num = {}
+#========================= DEFINE FUNCTION =========================
+
+def Getname(Client,Id,Guild = None):
+	if Guild== None:
+		return Client.get_user(int(Id)).name
+	else:
+		Mininame = Guild.get_member(int(Id)).nick
+		if Mininame != None:
+			return Client.get_user(int(Id)).name+"(AKA. "+Mininame+")"
+		return Client.get_user(int(Id)).name
 
 class MyClient(discord.Client):
     global Guess_Num
+
     async def on_ready(self):
-        print('\nLogged in as ' + self.user.name +
-              " (" + str(self.user.id) + ")\n------")
+        print('\nLogged in as ' + self.user.name +" (" + str(self.user.id) + ")\n------")
         await setBotName(self,'SMD')
         await client.change_presence(activity=discord.Game(name='รอเด็กมาโรงเรียน'))
 
     async def on_message(self, message):
-
         #print(f"\n\n\n===[{message.author.id}@{message.channel}->{message.content}*{message.attachments}]===\n{message}")
-        rudeWord = ["ทรงพระเจริญ","ด้วยเกล้า","ควรมิควรแล้วแต่จะ","เสี่ยโอ", "ข้ารองพระบาท", "เรารักในหลวง"]
         if any(word in message.content for word in rudeWord):
             await message.channel.send(randomText_rude().format(message))
 
         if message.content.lower().startswith('/hello'):
             await message.channel.send(randomText_Hello().format(message))
         if message.content.lower().startswith('/help') or message.content.lower().startswith('!help'):
-            em = discord.Embed(title="สิ่งที่น้องทำได้",
-                               description="มีแค่นี้แหละ")
+            em = discord.Embed(title="สิ่งที่น้องทำได้", description="มีแค่นี้แหละ")
             em.add_field(name="/help", value="ก็ที่ทำอยู่ตอนนี้แหละ")
             em.add_field(name="/hello", value="คำสั่งคนเหงา")
             em.add_field(name="/verify", value="สำหรับยืนยันตัวตน")
@@ -147,185 +205,91 @@ class MyClient(discord.Client):
             teacher = len(discord.utils.get(message.author.guild.roles, name="Teacher").members)
             await message.channel.send("[**สถิติ - STATS**]:\n\nม.1 `" + str(m1) + "`คน\n- ม.1/1 `" + str(m11) + "`คน\n- ม.1/2 `" + str(m12) + "`คน\n- ม.1/3 `" + str(m13) + "`คน\n- ม.1/4 `" + str(m14) + "`คน\n\nม.2 `" + str(m2) + "`คน\n- ม.2/1 `" + str(m21) + "`คน\n- ม.2/2 `" + str(m22) + "`คน\n- ม.2/3 `" + str(m33) + "`คน\n- ม.2/4 `" + str(m24) + "`คน\n\nม.3 `" + str(m3) + "`คน\n- ม.3/1 `" + str(m31) + "`คน\n- ม.3/2 `" + str(m32) + "`คน\n- ม.3/3 `" + str(m33) + "`คน\n- ม.3/4 `" + str(m34) + "` คน\n\nม.4 `" + str(m4) + "`คน\n- ม.4/1 `" + str(m41) + "`คน\n- ม.4/2 `" + str(m42) + "`คน\n- ม.4/3 `" + str(m43) + "`คน\n- ม.4/4 `" + str(m44) + "`คน\n- ม.4/5 `" + str(m45) + "`คน\n\nม.5 `" + str(m5) + "`คน\n- ม.5/1 `" + str(m51) + "`คน\n- ม.5/2 `" + str(m52) + "`คน\n- ม.5/3 `" + str(m53) + "`คน\n- ม.5/4 `" + str(m54) + "`คน\n- ม.5/5 `" + str(m55) + "`คน\n\nม.6 `" + str(m6) + "`คน\n- ม.6/1 `" + str(m61) + "`คน\n- ม.6/2 `" + str(m62) + "`คน\n- ม.6/3 `" + str(m63) + "`คน\n- ม.6/4 `" + str(m64) + "`คน\n- ม.6/5 `" + str(m65) + "`คน" + "\nคนรวมนักเรียนทั้งหมด `" + str(student) + "` คน\nศิษย์เก่า `" + str(alum) + "` คน\n\nอาจารย์ทั้งหมด `" + str(teacher) + "` ท่าน\n\nหมายเหตุ:\n - มีนักเรียนที่มีมากกว่า 1 บัญชีทั้งสิ้น `" + str(duplicate_student) + "` คน\n - มีอาจารย์ที่มีมากกว่า 1 บัญชีทั้งสิ้น `" + str(duplicate_teacher) + "` ท่าน")
 
+
         if message.content.lower().startswith('/forceverify'):
-            text = message.content[len('/forceverify'):].split()
-            
-            std_id = text[1]
+            text = message.content[len('/forceverify')+1:].split()
+            std_id = int(text[1])
 
-            response = requests.get(f"https://smd.pondja.com/api/student?id={text[1]}")
-            print(f"GET `https://smd.pondja.com/api/student?id={text[1]}`")
-            await client.get_channel(701042885931565156).send(f"GET `https://smd.pondja.com/api/student?id={text[1]}`")
-            if response.status_code != 200:
-                await message.channel.send(
-                    'ตอนนี้ระบบกำลังมีปัญหา ลองใหม่ในภายหลังนะครับ')
+            std_data_validation,std_data_prefix,std_data_firstname,std_data_lastname,std_data_grade,std_data_class = apiLookup(std_id)
 
-            checkId = int(std_id)
-
-            Con = response.json()
-
-            if std_id not in Con["std"]:
-                await message.channel.send('ไม่พบรหัสนักเรียน `' + std_id + "`")
-                print("RES not_found")
-                await client.get_channel(701042885931565156).send("RES `not_found`")
-
+            if len(text) < 2 or len(message.mentions) != 1:
+                await message.channel.send('โปรดพิมพ์ในรูปแบบ `/forceverify @Mention รหัสนักเรียน`')
+            if std_data_validation < 0:
+                await message.channel.send(f"ไม่พบรหัสนักเรียน `{std_id}`")
             else:
-                for Mem in message.mentions:                        
-                    api_res_id = Con["std"][std_id][0]["id"]
-                    api_res_prefix = Con["std"][std_id][0]["prefix"]
-                    api_res_firstname = Con["std"][std_id][0]["firstname"]
-                    api_res_lastname = Con["std"][std_id][0]["lastname"]
-                    api_res_lastname_forValidate = Con["std"][std_id][0]["lastname"].split()[0]
-                    api_res_grade = Con["std"][std_id][0]["grade"]
-                    api_res_class = Con["std"][std_id][0]["class"]
+                Mem = message.mentions[0]
+                await message.channel.send(f"USER: `{Mem.id} ({Mem.display_name})` [Force verify by `{message.author.display_name}`]\nชื่อ: `{std_data_firstname}`\nนามสกุล: `{std_data_lastname}`\nระดับชั้น: `{std_data_grade}/{std_data_class}`")
+                role = discord.utils.get(Mem.guild.roles, name=f"{std_data_grade}/{std_data_class}")
+                role2 = discord.utils.get(Mem.guild.roles, name=f"M:{std_data_grade}")
+                role3 = discord.utils.get(Mem.guild.roles, name="Student")
+                # await Mem.add_roles(abc.+)
 
-                    await message.channel.send("ชื่อ: `" + api_res_firstname + "`\nนามสกุล: `" + api_res_lastname + "`\nระดับชั้น: `" + api_res_grade + "/" + api_res_class + "`")
+                cursor = dbconnector.cursor()
+                query_func = ("UPDATE `std64_discordDB` SET `discord_user_id` = %s WHERE `id` = %s")
+                data_query = (Mem.id, text[0])
+                cursor.execute(query_func, data_query)
+                dbconnector.commit()
+                cursor.close()
+                dbconnector.close()
 
-                    role = discord.utils.get(
-                        Mem.guild.roles, name=api_res_grade + "/" + api_res_class)
-                    role2 = discord.utils.get(
-                        Mem.guild.roles, name="M:" + api_res_grade)
-                    role3 = discord.utils.get(
-                        Mem.guild.roles, name="Student")
-                    # await Mem.add_roles(abc.+)
-
-                    cnx = mysql.connector.connect(user='pondjaco', password='11032545', host='pondhub.ga', database='pondjaco_smdkku')
-                    cursor = cnx.cursor()
-
-                    query_func = ("UPDATE `std_2563_discordDB` SET `discord_user_id` = %s WHERE `id` = %s")
-                    data_query = (Mem.id, text[1])
-
-                    # Insert new employee
-                    cursor.execute(query_func, data_query)
-                
-                    # Make sure data is committed to the database
-                    cnx.commit()
-
-                    cursor.close()
-                    cnx.close()
-
-                    newprefix = ""
-                    if (api_res_prefix == "เด็กชาย"):
-                        newprefix = "ด.ช."
-                    elif (api_res_prefix == "เด็กหญิง"):
-                        newprefix = "ด.ญ."
-                    elif (api_res_prefix == "นางสาว"):
-                        newprefix = "น.ส."
-                    else:
-                        newprefix = api_res_prefix
-                    
-                    await Mem.edit(roles=[role, role2, role3])
-                    await Mem.edit(nick=newprefix + api_res_firstname + " " + api_res_lastname)
-                    await message.channel.send("Status: :white_check_mark:")
-                    # await Mem.change_nickname(api_res_prefix + " " + api_res_firstname + " " + api_res_lastname)
-
-                    print("new verify member: " + std_id)
-                    await client.get_channel(701042885931565156).send("new verify member: `" + std_id + "`")
-                    break
-                    
-            
-            
+                newprefix = std_data_prefix
+                if (std_data_prefix == "เด็กชาย"):
+                    newprefix = "ด.ช."
+                elif (std_data_prefix == "เด็กหญิง"):
+                    newprefix = "ด.ญ."
+                elif (std_data_prefix == "นางสาว"):
+                    newprefix = "น.ส."
+                await Mem.edit(roles=[role, role2, role3])
+                await Mem.edit(nick=newprefix + std_data_firstname + " " + std_data_lastname)
+                await message.channel.send("Status: :white_check_mark:")
+                print(f"new verify member: {std_id}")
+                await client.get_channel(701042885931565156).send(f"new verify member: `{std_id}`")
+                # await message.author.change_nickname(std_data_prefix + " " + std_data_firstname + " " + std_data_lastname)
             await message.delete()
 
         if message.content.lower().startswith('/verify'):
-            mess_input = message
-            user_id = str(message.author.id)
             text = message.content[len('/verify')+1:].split()
-            std_id = text[0]
+            discord_user_id = str(message.author.id)
+            std_id = int(text[0])
             std_firstname = text[1]
             std_lastname = text[2]
 
-            response = requests.get("https://smd.pondja.com/api/student?id=" + text[0])
-            print(f"GET `https://smd.pondja.com/api/student?id={text[0]}`")
-            await client.get_channel(701042885931565156).send(f"GET `https://smd.pondja.com/api/student?id={text[0]}`")
-            if response.status_code != 200:
-                await message.channel.send(
-                    'ตอนนี้ระบบกำลังมีปัญหา ลองใหม่ในภายหลังนะครับ')
+            std_data_validation,std_data_prefix,std_data_firstname,std_data_lastname,std_data_grade,std_data_class = apiLookup(std_id)
 
-            checkId = int(std_id)
-
-            Con = response.json()
-
-            if std_id not in Con["std"]:
-                await message.channel.send('ไม่พบรหัสนักเรียน `' + std_id + "`")
-                print("RES not_found")
-                await client.get_channel(701042885931565156).send("RES `not_found`")
-
+            if std_data_validation < 0:
+                await message.channel.send(f"ไม่พบรหัสนักเรียน `{std_id}`")
             else:
-                api_res_id = Con["std"][std_id][0]["id"]
-                api_res_prefix = Con["std"][std_id][0]["prefix"]
-                api_res_firstname = Con["std"][std_id][0]["firstname"]
-                api_res_lastname = Con["std"][std_id][0]["lastname"]
-                api_res_lastname_forValidate = Con["std"][std_id][0]["lastname"].split()[0]
-                api_res_grade = Con["std"][std_id][0]["grade"]
-                api_res_class = Con["std"][std_id][0]["class"]
-
-                await message.channel.send("USER: `" + user_id + " (" + message.author.display_name + ")`\nชื่อ: `" + api_res_firstname + "`\nนามสกุล: `" + api_res_lastname + "`\nระดับชั้น: `" + api_res_grade + "/" + api_res_class + "`")
-
-                # Data Match
-                if (api_res_firstname == std_firstname and api_res_lastname_forValidate == std_lastname):
-                    role = discord.utils.get(
-                        message.author.guild.roles, name=api_res_grade + "/" + api_res_class)
-                    role2 = discord.utils.get(
-                        message.author.guild.roles, name="M:" + api_res_grade)
-                    role3 = discord.utils.get(
-                        message.author.guild.roles, name="Student")
+                await message.channel.send(f"USER: `{discord_user_id} ({message.author.display_name})`\nชื่อ: `{std_data_firstname}`\nนามสกุล: `{std_data_lastname}`\nระดับชั้น: `{std_data_grade}/{std_data_class}`")
+                if std_data_firstname == std_firstname and std_data_lastname == std_lastname:
+                    role = discord.utils.get(message.author.guild.roles, name=f"{std_data_grade}/{std_data_class}")
+                    role2 = discord.utils.get(message.author.guild.roles, name=f"M:{std_data_grade}")
+                    role3 = discord.utils.get(message.author.guild.roles, name="Student")
                     # await message.author.add_roles(abc.+)
 
-                    cnx = mysql.connector.connect(user='pondjaco', password='11032545', host='pondhub.ga', database='pondjaco_smdkku')
-                    cursor = cnx.cursor()
-
-                    query_func = ("UPDATE `std_2563_discordDB` SET `discord_user_id` = %s WHERE `id` = %s")
+                    cursor = dbconnector.cursor()
+                    query_func = ("UPDATE `std64_discordDB` SET `discord_user_id` = %s WHERE `id` = %s")
                     data_query = (message.author.id, text[0])
-
-                    # Insert new employee
                     cursor.execute(query_func, data_query)
-                
-                    # Make sure data is committed to the database
-                    cnx.commit()
-
+                    dbconnector.commit()
                     cursor.close()
-                    cnx.close()
+                    dbconnector.close()
 
-                    newprefix = api_res_prefix
-                    if (api_res_prefix == "เด็กชาย"):
+                    newprefix = std_data_prefix
+                    if (std_data_prefix == "เด็กชาย"):
                         newprefix = "ด.ช."
-                    elif (api_res_prefix == "เด็กหญิง"):
+                    elif (std_data_prefix == "เด็กหญิง"):
                         newprefix = "ด.ญ."
-                    elif (api_res_prefix == "นางสาว"):
+                    elif (std_data_prefix == "นางสาว"):
                         newprefix = "น.ส."
                     await message.author.edit(roles=[role, role2, role3])
-                    await message.author.edit(nick=newprefix + api_res_firstname + " " + api_res_lastname)
+                    await message.author.edit(nick=newprefix + std_data_firstname + " " + std_data_lastname)
                     await message.channel.send("Status: :white_check_mark:")
-                    print("new verify member: " + std_id)
-                    await client.get_channel(701042885931565156).send("new verify member: `" + std_id + "`")
-                    # await message.author.change_nickname(api_res_prefix + " " + api_res_firstname + " " + api_res_lastname)
+                    print(f"new verify member: {std_id}")
+                    await client.get_channel(701042885931565156).send(f"new verify member: `{std_id}`")
+                    # await message.author.change_nickname(std_data_prefix + " " + std_data_firstname + " " + std_data_lastname)
                 else:
                     await message.channel.send("Status: :x:")
-                    await message.channel.send("โปรดมั่นใจว่าคุณพิมพ์ในรูปแบบ\n`/verify รหัสนักเรียน ชื่อ สกุล`")
-                print("RES " + str(Con["std"][std_id][0]))
-                await client.get_channel(701042885931565156).send("RES `" + str(Con["std"][std_id][0]) + "`")
-
-        if message.content.lower().startswith('/search'):
-            Mes_Str = message.content[len('/search')+1:]
-            response = requests.get(f"https://smd.pondja.com/api/student?search={Mes_Str}")
-            print(f"GET `https://smd.pondja.com/api/student?search={Mes_Str}`")
-            await client.get_channel(701042885931565156).send(f"GET `https://smd.pondja.com/api/student?search={Mes_Str}`")
-            if response.status_code != 200:
-                await message.channel.send(
-                    'ตอนนี้ระบบกำลังมีปัญหา ลองใหม่ในภายหลังนะครับ')
-            Con = response.json()
-            await message.channel.send(f"ข้อมูลทั้งหมดที่เกี่ยวข้องกับ {Mes_Str}")
-            if not len(Con["std"]):
-                message.channel.send("ไม่พบข้อมูล")
-            else:
-                i = 0
-                for s in Con["std"]:
-                    std_id = Con["std"][s][0]["id"]
-                    std_name = Con["std"][s][0]["firstname"] + " " + Con["std"][s][0]["lastname"]
-                    std_class = Con["std"][s][0]["grade"] + "/" + Con["std"][s][0]["class"]
-                    i += 1
-                    await message.channel.send(f"(**{i}**)\n> รหัสนักเรียน: {std_id}\n> ชื่อ: {std_name}\n> ระดับชั้น: {std_class}")
-            await message.channel.send("ไม่พบผลลัพธ์ที่ต้องการหรอ ลองเปลี่ยนคำค้นหาดูสิ")        
+                    await message.channel.send("โปรดมั่นใจว่าคุณพิมพ์ในรูปแบบ\n`/verify รหัสนักเรียน ชื่อ สกุล`")            
 
         if message.content.lower().startswith('/announce'):
             Mes_Str = message.content[len('/announce')+1:]
@@ -452,15 +416,13 @@ class MyClient(discord.Client):
         for Mem in message.mentions:
             if self.user.name == Mem.display_name:
                 if "ตารางสอบ" in message.content:
-                    await message.channel.send("ตารางสอบ กลางภาคเรียนที่ 2 ปีการศึกษา 2563".format(message))
-                    await message.channel.send("https://cdn.discordapp.com/attachments/601788363313512480/792976531571736606/133046506_3399645660165162_3244795859169062503_o.png".format(message))
-                    await message.channel.send("https://cdn.discordapp.com/attachments/601788363313512480/792976514529886228/133669598_3399645626831832_7078914509588730060_o.png".format(message))
+                    await message.channel.send("ตอนนี้ยังไม่ใกล้สอบ... แต่ก็อย่าลืมทำการบ้านแล้วก็อ่านหนังสือด้วยหล่ะ!")
                 elif "โดเนท" in message.content:
                     await message.channel.send("สามารถโดเนทได้ที่".format(message))
                     await message.channel.send("- Promptpay: `0908508007`".format(message))
                     await message.channel.send("- True Wallet: `0908508007`".format(message))
                 elif "ตารางเรียน" in message.content:
-                    await message.channel.send("ตารางเรียนภาคเรียนที่ 2 ปีการศึกษา 2563: https://www.facebook.com/SMD.KKU/posts/3258863167576746".format(message))
+                    await message.channel.send("ตารางเรียนภาคเรียนที่ 1 ปีการศึกษา 2564: https://www.facebook.com/SMD.KKU/posts/3791955510934173".format(message))
                 elif "หวย" in message.content:
                     await message.channel.send(f"อืมมมม..... เอาเป็นเลข {randint(0, 100):02d} ละกัน")
                 else:

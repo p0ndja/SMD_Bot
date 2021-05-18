@@ -28,7 +28,8 @@ if not path.isfile("settings.json"):
         "username": "<<USERNAME>>",
         "password": "<<PASSWORD>>",
         "database": "<<DATABASE>>"
-    }
+    },
+    "token": ""
 }"""
     
     f = open("settings.json","w")
@@ -44,10 +45,14 @@ except Exception as e:
     print("[!] ERROR on establishing database:\n", e)
     exit(0)
 
-
-insert_token = input("INSERT ME A TOKEN: ")
-if insert_token == "":
-    exit(1)
+if f['token'] == "":
+    insert_token = input("INSERT ME A TOKEN: ")
+    if insert_token == "":
+        print("WTF Token!?")
+        exit(1)
+    print("Next time, please set your token in settings.json")
+else:
+    insert_token = f['token']
 
 #========================= INITIAL STEP =========================
 

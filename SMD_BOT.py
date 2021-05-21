@@ -103,8 +103,8 @@ async def setBotName(Client, name):
         await GG.me.edit(nick = name)
 
 def apiLookup():
-    response = requests.get("https://api.11th.studio/p0ndja/std64?id="+str(stdID))
-    print(f"GET: https://api.11th.studio/p0ndja/std64?id={stdID}")
+    response = requests.get("http://203.159.94.111/api.11th.studio/p0ndja/std64?id="+str(stdID))
+    print(f"GET: http://203.159.94.111/api.11th.studio/p0ndja/std64?id={stdID}")
     if response.status_code != 200:
         print(f"ERROR: INTERNAL SERVER ERROR")
         return -1,"","","",-1,-1
@@ -112,8 +112,8 @@ def apiLookup():
     return 0,response.json()
 
 def apiLookup(stdID:int):
-    response = requests.get("https://api.11th.studio/p0ndja/std64?id="+str(stdID))
-    print(f"GET: https://api.11th.studio/p0ndja/std64?id={stdID}")
+    response = requests.get("http://203.159.94.111/api.11th.studio/p0ndja/std64?id="+str(stdID))
+    print(f"GET: http://203.159.94.111/api.11th.studio/p0ndja/std64?id={stdID}")
     if response.status_code != 200:
         print(f"ERROR: INTERNAL SERVER ERROR")
         return -1,"","","",-1,-1
@@ -131,6 +131,25 @@ def apiLookup(stdID:int):
     #Student ID found
     return 1, stdDB[str(stdID)]["prefix"], stdDB[str(stdID)]["firstname"], stdDB[str(stdID)]["lastname"], int(stdDB[str(stdID)]["grade"]), int(stdDB[str(stdID)]["class"])
 
+def legacyapiLookup(stdDID:int):
+    response = requests.get(f"http://203.159.94.111/api.11th.studio/p0ndja/std63?id={stdDID}")
+    print(f"GET: http://203.159.94.111/api.11th.studio/p0ndja/std63?did={stdDID}")
+    if response.status_code != 200:
+        print(f"ERROR: INTERNAL SERVER ERROR")
+        return -1,"","","",-1,-1
+
+    print(requests.get(f"http://203.159.94.111/api.11th.studio/p0ndja/std63?id={stdDID}").json())
+    stdDB = response.json()
+    #Student ID not found
+    if len(stdDB) > 1:
+        return 0,response.json()
+    elif str(stdDID) not in stdDB.keys():
+        print(f"RESPONSE: ID {stdDID} NOT FOUND")
+        return -1,""
+    
+    #Student ID found
+    return 1, stdDB[str(stdDID)]["id"]
+
 rudeWord = ["ทรงพระเจริญ","ด้วยเกล้า","ควรมิควรแล้วแต่จะ","เสี่ยโอ", "ข้ารองพระบาท", "เรารักในหลวง"]
 Guess_Num = {}
 #========================= DEFINE FUNCTION =========================
@@ -144,7 +163,11 @@ def Getname(Client,Id,Guild = None):
 			return Client.get_user(int(Id)).name+"(AKA. "+Mininame+")"
 		return Client.get_user(int(Id)).name
 
+intents = discord.Intents.default()
+intents.members = True
+
 class MyClient(discord.Client):
+    client = discord.Client(intents=intents)
     global Guess_Num
 
     async def on_ready(self):
@@ -157,6 +180,44 @@ class MyClient(discord.Client):
         if any(word in message.content for word in rudeWord):
             await message.channel.send(randomText_rude().format(message))
 
+        if message.content.lower().startswith('/testupgrade'):
+            """
+            aid = 581729498328727556
+            # aid = message.author.id
+            api_validation, api_stdID = legacyapiLookup(aid)
+            if (api_validation == 1):
+                std_data_validation,std_data_prefix,std_data_firstname,std_data_lastname,std_data_grade,std_data_class = apiLookup(api_stdID)
+                if std_data_validation < 0:
+                    await message.channel.send(f"ไม่พบรหัสนักเรียน `{api_stdID}`\nโปรดทำการยืนยันตัวตนใหม่อีกครั้งด้วยคำสั่ง `/verify รหัสนักเรียน ชื่อ สกุล`")
+                else:
+                    await message.channel.send(f"USER: `{aid} ({message.author.display_name})`\nชื่อ: `{std_data_firstname}`\nนามสกุล: `{std_data_lastname}`\nระดับชั้น: `{std_data_grade}/{std_data_class}`")
+                    role = discord.utils.get(message.author.guild.roles, name=f"{std_data_grade}/{std_data_class}")
+                    role2 = discord.utils.get(message.author.guild.roles, name=f"M:{std_data_grade}")
+                    role3 = discord.utils.get(message.author.guild.roles, name="Student")
+                    # await message.author.add_roles(abc.+)
+
+                    cursor = dbconnector.cursor()
+                    query_func = ("UPDATE `std64_discordDB` SET `discord_user_id` = %s WHERE `id` = %s")
+                    data_query = (message.author.id, aid)
+                    cursor.execute(query_func, data_query)
+                    dbconnector.commit()
+                    cursor.close()
+                    dbconnector.close()
+
+                    newprefix = std_data_prefix
+                    if (std_data_prefix == "เด็กชาย"):
+                        newprefix = "ด.ช."
+                    elif (std_data_prefix == "เด็กหญิง"):
+                        newprefix = "ด.ญ."
+                    elif (std_data_prefix == "นางสาว"):
+                        newprefix = "น.ส."
+                    # await message.author.edit(roles=[role, role2, role3])
+                    # await message.author.edit(nick=newprefix + std_data_firstname + " " + std_data_lastname)
+                    await message.channel.send("Status: :white_check_mark:")
+                    print(f"new verify member: {api_stdID}")
+                    await client.get_channel(701042885931565156).send(f"new verify member: `{api_stdID}`")
+                    # await message.author.change_nickname(std_data_prefix + " " + std_data_firstname + " " + std_data_lastname)    
+            """
         if message.content.lower().startswith('/hello'):
             await message.channel.send(randomText_Hello().format(message))
         if message.content.lower().startswith('/help') or message.content.lower().startswith('!help'):
@@ -213,8 +274,8 @@ class MyClient(discord.Client):
 
         if message.content.lower().startswith('/forceverify'):
             text = message.content[len('/forceverify')+1:].split()
-            std_id = int(text[1])
-
+            std_id = int(text[1].replace('\u200b',''))
+            print(apiLookup(std_id))
             std_data_validation,std_data_prefix,std_data_firstname,std_data_lastname,std_data_grade,std_data_class = apiLookup(std_id)
 
             if len(text) < 2 or len(message.mentions) != 1:
@@ -223,19 +284,19 @@ class MyClient(discord.Client):
                 await message.channel.send(f"ไม่พบรหัสนักเรียน `{std_id}`")
             else:
                 Mem = message.mentions[0]
-                await message.channel.send(f"USER: `{Mem.id} ({Mem.display_name})` [Force verify by `{message.author.display_name}`]\nชื่อ: `{std_data_firstname}`\nนามสกุล: `{std_data_lastname}`\nระดับชั้น: `{std_data_grade}/{std_data_class}`")
+                await message.channel.send(f"USER: `{Mem.id} ({Mem.display_name})` [Force verify by `{message.author.display_name}`]\nชื่อ: `{std_data_firstname}`\nนามสกุล: `{std_data_lastname}`\nระดับชั้น: `{std_data_grade}/{std_data_class}`\nStatus: :white_check_mark:")
                 role = discord.utils.get(Mem.guild.roles, name=f"{std_data_grade}/{std_data_class}")
                 role2 = discord.utils.get(Mem.guild.roles, name=f"M:{std_data_grade}")
                 role3 = discord.utils.get(Mem.guild.roles, name="Student")
                 # await Mem.add_roles(abc.+)
 
-                cursor = dbconnector.cursor()
-                query_func = ("UPDATE `std64_discordDB` SET `discord_user_id` = %s WHERE `id` = %s")
-                data_query = (Mem.id, text[0])
-                cursor.execute(query_func, data_query)
-                dbconnector.commit()
-                cursor.close()
-                dbconnector.close()
+                #cursor = dbconnector.cursor()
+                #query_func = ("UPDATE `std64_discordDB` SET `discord_user_id` = %s WHERE `id` = %s")
+                #data_query = (Mem.id, text[0])
+                #cursor.execute(query_func, data_query)
+                #dbconnector.commit()
+                #cursor.close()
+                #dbconnector.close()
 
                 newprefix = std_data_prefix
                 if (std_data_prefix == "เด็กชาย"):
@@ -246,7 +307,6 @@ class MyClient(discord.Client):
                     newprefix = "น.ส."
                 await Mem.edit(roles=[role, role2, role3])
                 await Mem.edit(nick=newprefix + std_data_firstname + " " + std_data_lastname)
-                await message.channel.send("Status: :white_check_mark:")
                 print(f"new verify member: {std_id}")
                 await client.get_channel(701042885931565156).send(f"new verify member: `{std_id}`")
                 # await message.author.change_nickname(std_data_prefix + " " + std_data_firstname + " " + std_data_lastname)
@@ -255,7 +315,7 @@ class MyClient(discord.Client):
         if message.content.lower().startswith('/verify'):
             text = message.content[len('/verify')+1:].split()
             discord_user_id = str(message.author.id)
-            std_id = int(text[0])
+            std_id = int(text[0].replace('\u200b',''))
             std_firstname = text[1]
             std_lastname = text[2]
 
@@ -264,20 +324,24 @@ class MyClient(discord.Client):
             if std_data_validation < 0:
                 await message.channel.send(f"ไม่พบรหัสนักเรียน `{std_id}`")
             else:
-                await message.channel.send(f"USER: `{discord_user_id} ({message.author.display_name})`\nชื่อ: `{std_data_firstname}`\nนามสกุล: `{std_data_lastname}`\nระดับชั้น: `{std_data_grade}/{std_data_class}`")
+                msg = f"USER: `{discord_user_id} ({message.author.display_name})`\nชื่อ: `{std_data_firstname}`\nนามสกุล: `{std_data_lastname}`\nระดับชั้น: `{std_data_grade}/{std_data_class}`\n"
+                print(f"compare\n{std_data_firstname}->{std_firstname},\n{std_data_lastname}->{std_lastname}")
                 if std_data_firstname == std_firstname and std_data_lastname == std_lastname:
+                    msg += "Status: :white_check_mark:"
+                    await message.channel.send(msg)
                     role = discord.utils.get(message.author.guild.roles, name=f"{std_data_grade}/{std_data_class}")
                     role2 = discord.utils.get(message.author.guild.roles, name=f"M:{std_data_grade}")
                     role3 = discord.utils.get(message.author.guild.roles, name="Student")
                     # await message.author.add_roles(abc.+)
 
-                    cursor = dbconnector.cursor()
-                    query_func = ("UPDATE `std64_discordDB` SET `discord_user_id` = %s WHERE `id` = %s")
-                    data_query = (message.author.id, text[0])
-                    cursor.execute(query_func, data_query)
-                    dbconnector.commit()
-                    cursor.close()
-                    dbconnector.close()
+                #cursor = dbconnector.cursor()
+                #query_func = ("UPDATE `std64_discordDB` SET `discord_user_id` = %s WHERE `id` = %s")
+                #data_query = (Mem.id, text[0])
+                #cursor.execute(query_func, data_query)
+                #dbconnector.commit()
+                #cursor.close()
+                #dbconnector.close()
+
 
                     newprefix = std_data_prefix
                     if (std_data_prefix == "เด็กชาย"):
@@ -288,12 +352,12 @@ class MyClient(discord.Client):
                         newprefix = "น.ส."
                     await message.author.edit(roles=[role, role2, role3])
                     await message.author.edit(nick=newprefix + std_data_firstname + " " + std_data_lastname)
-                    await message.channel.send("Status: :white_check_mark:")
+                    await message.channel.send("Status: ")
                     print(f"new verify member: {std_id}")
                     await client.get_channel(701042885931565156).send(f"new verify member: `{std_id}`")
                     # await message.author.change_nickname(std_data_prefix + " " + std_data_firstname + " " + std_data_lastname)
                 else:
-                    await message.channel.send("Status: :x:")
+                    await message.channel.send(msg + "Status: :x:")
                     await message.channel.send("โปรดมั่นใจว่าคุณพิมพ์ในรูปแบบ\n`/verify รหัสนักเรียน ชื่อ สกุล`")            
 
         if message.content.lower().startswith('/announce'):

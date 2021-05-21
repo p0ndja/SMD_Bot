@@ -327,21 +327,19 @@ class MyClient(discord.Client):
                 msg = f"USER: `{discord_user_id} ({message.author.display_name})`\nชื่อ: `{std_data_firstname}`\nนามสกุล: `{std_data_lastname}`\nระดับชั้น: `{std_data_grade}/{std_data_class}`\n"
                 print(f"compare\n{std_data_firstname}->{std_firstname},\n{std_data_lastname}->{std_lastname}")
                 if std_data_firstname == std_firstname and std_data_lastname == std_lastname:
-                    msg += "Status: :white_check_mark:"
-                    await message.channel.send(msg)
                     role = discord.utils.get(message.author.guild.roles, name=f"{std_data_grade}/{std_data_class}")
                     role2 = discord.utils.get(message.author.guild.roles, name=f"M:{std_data_grade}")
                     role3 = discord.utils.get(message.author.guild.roles, name="Student")
+                    await message.author.edit(roles=[role, role2, role3])
                     # await message.author.add_roles(abc.+)
 
-                #cursor = dbconnector.cursor()
-                #query_func = ("UPDATE `std64_discordDB` SET `discord_user_id` = %s WHERE `id` = %s")
-                #data_query = (Mem.id, text[0])
-                #cursor.execute(query_func, data_query)
-                #dbconnector.commit()
-                #cursor.close()
-                #dbconnector.close()
-
+                    #cursor = dbconnector.cursor()
+                    #query_func = ("UPDATE `std64_discordDB` SET `discord_user_id` = %s WHERE `id` = %s")
+                    #data_query = (Mem.id, text[0])
+                    #cursor.execute(query_func, data_query)
+                    #dbconnector.commit()
+                    #cursor.close()
+                    #dbconnector.close()
 
                     newprefix = std_data_prefix
                     if (std_data_prefix == "เด็กชาย"):
@@ -350,14 +348,14 @@ class MyClient(discord.Client):
                         newprefix = "ด.ญ."
                     elif (std_data_prefix == "นางสาว"):
                         newprefix = "น.ส."
-                    await message.author.edit(roles=[role, role2, role3])
-                    await message.author.edit(nick=newprefix + std_data_firstname + " " + std_data_lastname)
+                    await message.author.edit(nick=f"{newprefix}{std_data_firstname} {std_data_lastname}")
+
+                    await message.channel.send(msg + "Status: :white_check_mark:")
                     print(f"new verify member: {std_id}")
                     await client.get_channel(701042885931565156).send(f"new verify member: `{std_id}`")
                     # await message.author.change_nickname(std_data_prefix + " " + std_data_firstname + " " + std_data_lastname)
                 else:
-                    await message.channel.send(msg + "Status: :x:")
-                    await message.channel.send("โปรดมั่นใจว่าคุณพิมพ์ในรูปแบบ\n`/verify รหัสนักเรียน ชื่อ สกุล`")            
+                    await message.channel.send(msg + "Status: :x:\nโปรดมั่นใจว่าคุณพิมพ์ในรูปแบบ\n`/verify รหัสนักเรียน ชื่อ สกุล`")
 
         if message.content.lower().startswith('/announce'):
             Mes_Str = message.content[len('/announce')+1:]

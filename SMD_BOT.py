@@ -352,7 +352,6 @@ class MyClient(discord.Client):
                         newprefix = "น.ส."
                     await message.author.edit(roles=[role, role2, role3])
                     await message.author.edit(nick=newprefix + std_data_firstname + " " + std_data_lastname)
-                    await message.channel.send("Status: ")
                     print(f"new verify member: {std_id}")
                     await client.get_channel(701042885931565156).send(f"new verify member: `{std_id}`")
                     # await message.author.change_nickname(std_data_prefix + " " + std_data_firstname + " " + std_data_lastname)

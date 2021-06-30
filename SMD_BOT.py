@@ -103,8 +103,8 @@ async def setBotName(Client, name):
         await GG.me.edit(nick = name)
 
 def apiLookup():
-    response = requests.get("http://api.11th.studio/p0ndja/std64?id="+str(stdID))
-    print(f"GET: http://api.11th.studio/p0ndja/std64?id={stdID}")
+    response = requests.get("https://api.11th.studio/p0ndja/std64?id="+str(stdID))
+    print(f"GET: https://api.11th.studio/p0ndja/std64?id={stdID}")
     if response.status_code != 200:
         print(f"ERROR: INTERNAL SERVER ERROR")
         return -1,"","","",-1,-1
@@ -112,8 +112,8 @@ def apiLookup():
     return 0,response.json()
 
 def apiLookup(stdID:int):
-    response = requests.get("http://api.11th.studio/p0ndja/std64?id="+str(stdID))
-    print(f"GET: http://api.11th.studio/p0ndja/std64?id={stdID}")
+    response = requests.get("https://api.11th.studio/p0ndja/std64?id="+str(stdID))
+    print(f"GET: https://api.11th.studio/p0ndja/std64?id={stdID}")
     if response.status_code != 200:
         print(f"ERROR: INTERNAL SERVER ERROR")
         return -1,"","","",-1,-1
@@ -132,13 +132,13 @@ def apiLookup(stdID:int):
     return 1, stdDB[str(stdID)]["prefix"], stdDB[str(stdID)]["firstname"], stdDB[str(stdID)]["lastname"], int(stdDB[str(stdID)]["grade"]), int(stdDB[str(stdID)]["class"])
 
 def legacyapiLookup(stdDID:int):
-    response = requests.get(f"http://api.11th.studio/p0ndja/std63?id={stdDID}")
-    print(f"GET: http://api.11th.studio/p0ndja/std63?did={stdDID}")
+    response = requests.get(f"https://api.11th.studio/p0ndja/std63?id={stdDID}")
+    print(f"GET: https://api.11th.studio/p0ndja/std63?did={stdDID}")
     if response.status_code != 200:
         print(f"ERROR: INTERNAL SERVER ERROR")
         return -1,"","","",-1,-1
 
-    print(requests.get(f"http://api.11th.studio/p0ndja/std63?id={stdDID}").json())
+    print(requests.get(f"https://api.11th.studio/p0ndja/std63?id={stdDID}").json())
     stdDB = response.json()
     #Student ID not found
     if len(stdDB) > 1:

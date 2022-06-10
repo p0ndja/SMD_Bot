@@ -103,8 +103,8 @@ async def setBotName(Client, name):
         await GG.me.edit(nick = name)
 
 def apiLookup():
-    response = requests.get("https://api.11th.studio/p0ndja/std64?id="+str(stdID))
-    print(f"GET: https://api.11th.studio/p0ndja/std64?id={stdID}")
+    response = requests.get("https://api.p0nd.dev/p0ndja/std65?id="+str(stdID))
+    print(f"GET: https://api.p0nd.dev/p0ndja/std65?id={stdID}")
     if response.status_code != 200:
         print(f"ERROR: INTERNAL SERVER ERROR")
         return -1,"","","",-1,-1
@@ -112,8 +112,8 @@ def apiLookup():
     return 0,response.json()
 
 def apiLookup(stdID:int):
-    response = requests.get("https://api.11th.studio/p0ndja/std64?id="+str(stdID))
-    print(f"GET: https://api.11th.studio/p0ndja/std64?id={stdID}")
+    response = requests.get("https://api.p0nd.dev/p0ndja/std65?id="+str(stdID))
+    print(f"GET: https://api.p0nd.dev/p0ndja/std65?id={stdID}")
     if response.status_code != 200:
         print(f"ERROR: INTERNAL SERVER ERROR")
         return -1,"","","",-1,-1
@@ -132,13 +132,13 @@ def apiLookup(stdID:int):
     return 1, stdDB[str(stdID)]["prefix"], stdDB[str(stdID)]["firstname"], stdDB[str(stdID)]["lastname"], int(stdDB[str(stdID)]["grade"]), int(stdDB[str(stdID)]["class"])
 
 def legacyapiLookup(stdDID:int):
-    response = requests.get(f"https://api.11th.studio/p0ndja/std63?id={stdDID}")
-    print(f"GET: https://api.11th.studio/p0ndja/std63?did={stdDID}")
+    response = requests.get(f"https://api.p0nd.dev/p0ndja/std63?id={stdDID}")
+    print(f"GET: https://api.p0nd.dev/p0ndja/std63?did={stdDID}")
     if response.status_code != 200:
         print(f"ERROR: INTERNAL SERVER ERROR")
         return -1,"","","",-1,-1
 
-    print(requests.get(f"https://api.11th.studio/p0ndja/std63?id={stdDID}").json())
+    print(requests.get(f"https://api.p0nd.dev/p0ndja/std63?id={stdDID}").json())
     stdDB = response.json()
     #Student ID not found
     if len(stdDB) > 1:
@@ -197,7 +197,7 @@ class MyClient(discord.Client):
                     # await message.author.add_roles(abc.+)
 
                     cursor = dbconnector.cursor()
-                    query_func = ("UPDATE `std64_discordDB` SET `discord_user_id` = %s WHERE `id` = %s")
+                    query_func = ("UPDATE `std65_discordDB` SET `discord_user_id` = %s WHERE `id` = %s")
                     data_query = (message.author.id, aid)
                     cursor.execute(query_func, data_query)
                     dbconnector.commit()
@@ -291,7 +291,7 @@ class MyClient(discord.Client):
                 # await Mem.add_roles(abc.+)
 
                 #cursor = dbconnector.cursor()
-                #query_func = ("UPDATE `std64_discordDB` SET `discord_user_id` = %s WHERE `id` = %s")
+                #query_func = ("UPDATE `std65_discordDB` SET `discord_user_id` = %s WHERE `id` = %s")
                 #data_query = (Mem.id, text[0])
                 #cursor.execute(query_func, data_query)
                 #dbconnector.commit()
@@ -318,6 +318,9 @@ class MyClient(discord.Client):
             std_id = int(text[0].replace('\u200b',''))
             std_firstname = text[1]
             std_lastname = text[2]
+            if len(text) > 3:
+                for i in range(3,len(text)):
+                    std_lastname += " " + text[i]
 
             std_data_validation,std_data_prefix,std_data_firstname,std_data_lastname,std_data_grade,std_data_class = apiLookup(std_id)
 
@@ -333,7 +336,7 @@ class MyClient(discord.Client):
                     # await message.author.add_roles(abc.+)
 
                     #cursor = dbconnector.cursor()
-                    #query_func = ("UPDATE `std64_discordDB` SET `discord_user_id` = %s WHERE `id` = %s")
+                    #query_func = ("UPDATE `std65_discordDB` SET `discord_user_id` = %s WHERE `id` = %s")
                     #data_query = (Mem.id, text[0])
                     #cursor.execute(query_func, data_query)
                     #dbconnector.commit()
